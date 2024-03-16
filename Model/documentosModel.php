@@ -7,8 +7,8 @@ class ModelDocumentos
 
   public function __construct()
   {
-    require_once(dirname(__DIR__) . '/Config/conexion.php');
-    require_once(dirname(__DIR__) . '/Controller/limpiar.php');
+    require_once(dirname(__DIR__) . '../Config/conexion.php');
+    require_once(dirname(__DIR__) . '../Controller/limpiar.php');
     $con = new db();
     $this->PDO = $con->conexion();
   }
@@ -35,13 +35,30 @@ class ModelDocumentos
     return $documentos;
   }
 
-
+  public function cargarDocumento($n, $f, $u)
+  {
+    $nombre = limpiarDato($n) . 'pdf';
+    $fecha = limpiarDato($f);
+    $url = limpiarDato($u);
+    $query = "INSERT INTO `documentos` (`id_documento`, `nombre`, `fecha`, `url`) VALUES (NULL, :nombre , :fecha, :url)";
+    $doc = $this->PDO->prepare($query);
+    $doc->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+    $doc->bindParam(':fecha', $fecha, PDO::PARAM_STR);
+    $doc->bindParam(':url', $url, PDO::PARAM_STR);
+    $doc->execute();
+    if ($doc->rowCount() > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   public function visualizarDocumentoAdmin($i)
   {
     try {
       $id = limpiarDato($i);
       $doc['id'] = $id;
+
       $query = "SELECT `nombre`, `url` FROM `documentos` WHERE `id_documento` = :iDoc";
       $stmt = $this->PDO->prepare($query);
       $stmt->bindParam(':iDoc', $id, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT);
@@ -49,25 +66,42 @@ class ModelDocumentos
       $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
       $pdf = '../' . $data['url'];
-      $d = dirname(__DIR__) . '\Views\web\filesAdmin/';
+
+      /*  $d ='../../visualizer/web/filesAdmin/'; */
+      $d = dirname(__DIR__) . '/visualizer/web/filesAdmin/';
 
       $uniqueFolderName = uniqid();
-      $base = "../Views/web/63db304ba6ec9/";
+      #$base = "../Views/web/63db304ba6ec9/";
+
+      // Suponiendo que $d ya contiene una ruta válida y termina con una barra diagonal
       $dir = $d . $uniqueFolderName;
+      print_r($dir);
 
+      // Verificar si el directorio padre existe antes de intentar crear $dir
+      if (!is_dir($d)) {
+        throw new Exception("El directorio padre no existe.");
+      }
+
+      // Verificar si el directorio $dir no existe
       if (!is_dir($dir)) {
-        mkdir($dir, 0777, true);
+        mkdir($dir);
 
-
-
+        // Asignar valores a las claves 'folder' y 'pdf' del arreglo $doc
         $doc['folder'] = $uniqueFolderName;
         $doc['pdf'] = "filesAdmin/" . $uniqueFolderName . "/" . $data['nombre'];
 
+        // Construir la ruta completa del archivo destino
         $file = $dir . "/" . $data['nombre'];
+
+        // Copiar el archivo desde $pdf a $file
         if (!copy($pdf, $file)) {
-          throw new Exception("Error copying file.");
+          throw new Exception("Error al copiar el archivo.");
         }
+      } else {
+        throw new Exception("El directorio ya existe.");
       }
+
+
       return $doc;
     } catch (Exception $e) {
       // Handle the exception here
@@ -92,22 +126,24 @@ class ModelDocumentos
       $pdf = $data['url'];
 
       $uniqueFolderName = uniqid();
-      $base = "../Views/web/63db304ba6ec9/";
+      $base = dirname(__DIR__) . '/visualizer/web/63db304ba6ec9/';
+      #   $base = "../visualizer/web/63db304ba6ec9/";
       $dir = $base . $uniqueFolderName;
 
+      #  print_r($dir);
+
       if (!is_dir($dir)) {
-        mkdir($dir, 0777, true);
+        mkdir($dir,);
+
+
+        $doc['folder'] = $uniqueFolderName;
+        $doc['pdf'] = "63db304ba6ec9/" . $uniqueFolderName . "/" . $data['nombre'];
       }
-
-
-      $doc['folder'] = $uniqueFolderName;
-      $doc['pdf'] = "63db304ba6ec9/" . $uniqueFolderName . "/" . $data['nombre'];
 
       $file = $dir . "/" . $data['nombre'];
       if (!copy($pdf, $file)) {
         throw new Exception("Error copying file.");
       }
-
       return $doc;
     } catch (Exception $e) {
       // Handle the exception here
@@ -129,5 +165,35 @@ class ModelDocumentos
     } else {
       return false;
     }
+  }
+
+  public function vistasDocumento($i)
+  {
+    $idCliente = $_SESSION['user']['id_usuario'];
+    $idDoc = limpiarDato($i);
+
+    $this->PDO->beginTransaction();
+
+    $asignadas = $this->PDO->query('SELECT `vistas_asignadas` FROM `config_vistas_usuario` WHERE `id_usuario` = ' . $idCliente . '');
+    $vistasUsadas = $this->PDO->query('SELECT `total_vistas_usadas` FROM `vistas` WHERE vistas.id_documento = ' . $idDoc . ' AND vistas.id_usuario = ' . $idCliente . '');
+
+
+    $this->PDO->commit();
+    $asignadas = $asignadas->fetchColumn();
+    $vistasUsadas = $vistasUsadas->fetchColumn();
+    $data['asignadas'] = $asignadas;
+    $data['TotalUsadas'] = $vistasUsadas;
+    return $data;
+/*  if ($asignadas >= $vistasUsadas) {
+
+        return "vistas-usadas";
+      }
+      if ($vistasUsadas < $asignadas) {
+
+        return "menores";
+      }
+    else {
+      return "no-visualizado";
+    }  */
   }
 }

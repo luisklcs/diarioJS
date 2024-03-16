@@ -1,11 +1,11 @@
 <?php
 # echo "<script> alert('conectado...')</script>";
 
-$datatables = dirname(__DIR__) . '/panel/assets/demo/datatables-demo.js';
-$scripts = dirname(__DIR__) . '/panel/js/scripts.js';
-$chart = dirname(__DIR__) . '/panel/assets/demo/chart-area-demo.js';
-$bar = dirname(__DIR__) . '/panel/assets/demo/chart-bar-demo.js';
-$styles = dirname(__DIR__) . '\panel\css\styles.css';
+$datatables = '/panel/assets/demo/datatables-demo.js';
+$scripts = '/panel/js/scripts.js';
+$chart = '/panel/assets/demo/chart-area-demo.js';
+$bar = '/panel/assets/demo/chart-bar-demo.js';
+$styles = '\panel\css\styles.css';
 ?>
 
 

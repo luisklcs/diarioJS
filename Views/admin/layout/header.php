@@ -63,7 +63,7 @@
           <li class="nav-item px-3 d-flex align-items-center">
           </li>
 
-<!-- NOFICICACIONES -->
+<!-- NOFICICACIONES 
           <li class="nav-item dropdown pe-2 d-flex align-items-center">
             <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fa fa-bell cursor-pointer"></i>
@@ -73,7 +73,7 @@
                 <a class="dropdown-item border-radius-md" href="javascript:;">
                   <div class="d-flex py-1">
                     <div class="my-auto">
-                  <!--     <img src="../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 "> -->
+          <img src="../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 "> 
                     </div>
                     <div class="d-flex flex-column justify-content-center">
                       <h6 class="text-sm font-weight-normal mb-1">
@@ -91,7 +91,7 @@
                 <a class="dropdown-item border-radius-md" href="javascript:;">
                   <div class="d-flex py-1">
                     <div class="my-auto">
-                     <!--  <img src="../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 "> -->
+                 <img src="../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 "> 
                     </div>
                     <div class="d-flex flex-column justify-content-center">
                       <h6 class="text-sm font-weight-normal mb-1">
@@ -138,7 +138,7 @@
             </ul>
           </li>
 
-<!-- FIN NOFICICACIONES -->
+FIN NOFICICACIONES -->
 
         </ul>
       </div>

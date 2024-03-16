@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1 ) {
-require_once(dirname(__DIR__) . '../../Config/conexion.php');
+require_once('../../Config/conexion.php');
 $bd = new db();
 $dbh = $bd->conexion();
 $dbh->beginTransaction();

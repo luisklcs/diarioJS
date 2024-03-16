@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__DIR__) . '../Model/clientesModel.php');
+require_once('../../Model/clientesModel.php');
 
 class clientesController
 {
@@ -41,6 +41,10 @@ class clientesController
     echo '<script type="text/javascript"> location.href = "editar.php";  </script> ';
   }
 
+  public function infoCuentaCliente($id)
+  {
+    return $this->objCliente->infoCuentaCliente($id);
+  }
   public function actualizar($data)
   {
     return $this->objCliente->actualizar($data);
@@ -50,11 +54,16 @@ class clientesController
     return $this->objCliente->eliminarCliente($idCliente);
   }
 
-  public function cargarVistas($id)
+  public function cargarVistas()
   {
       $id =  $_SESSION['id'];
-      return $this->objCliente->vistasgenerales($id);
-    
+      return $this->objCliente->vistasgenerales($id);   
    
   }
+
+  public function buscarVistasGenerages()
+  {
+   return $this->objCliente->buscarVistasGenerages();
+  }
+
 }

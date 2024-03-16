@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__DIR__) . '/admin/layout/links.php');
+require_once('../admin/layout/links.php');
 if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
-    require_once(dirname(__DIR__) . '/../Controller/documentosController.php');
+    require_once('../../Controller/documentosController.php');
 
     $controller = new DocumentosController();
 
@@ -17,8 +17,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
     include 'aside.php';
     $asd = new Aside();
 ?>
-    <?php #require_once(dirname(__DIR__) . '/admin/layout/buscar.php'); 
-    ?>
+
     <link rel="icon" href="../assets/img/icon.png" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -26,13 +25,13 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
 
         <?php $opc = "documentos";
         $asd->aside($opc);
-        require_once(dirname(__DIR__) . '/admin/layout/header.php');
+        require_once('../admin/layout/header.php');
         ?>
         <!-- End Navbar -->
         <div class="container-fluid py-4">
             <div class="row my-4">
-                <!-- LISTA DE CLIENTES LISTA DE CLIENTES LISTA DE CLIENTES LISTA DE CLIENTES LISTA DE CLIENTES -->
-                <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+                <!-- LISTA DE DOCUMENTOS LISTA DE DOCUMENTOS LISTA DE DOCUMENTOS LISTA DE DOCUMENTOS LISTA DE DOCUMENTOS -->
+                <div class="col-lg-12 mb-md-0 mb-4">
                     <div class="card">
                         <div class="card-header pb-0">
                             <div class="row">
@@ -45,20 +44,26 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
                                         </span> registrados <i class="fa fa-check text-info" aria-hidden="true"></i>
                                     </p>
                                 </div>
+                                <div class="col-lg-6 col-7">
+                                    <div class="input-group">
+                                        <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                                        <input type="text" class="form-control" name="busquedaDocumento" id="busquedaDocumento" placeholder="Ingrese el nombre o fecha del documento">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <?php
 
                         if ($_POST) {
-                        
+
                             $id = $_POST['id'];
                             switch ($_POST['accion']) {
-                                
+
                                 case 'verDocumento':
                                     $controller->verDocAdmin($id);
                                     break;
 
-                                case 'eliminarDocumento':                        
+                                case 'eliminarDocumento':
                                     $controller->borrarDocumento($id);
                                     break;
                             }
@@ -66,7 +71,10 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
 
                         ?>
                         <div class="card-body px-0 pb-2">
-                            <div class="table-responsive">
+                            <div class="table-responsive" id="resultadobusqueda" name="resultadobusqueda">
+
+                            </div>
+                            <div class="table-responsive" id="tablaDocumentos">
                                 <table class="table align-items-center mb-0">
                                     <thead>
                                         <tr>
@@ -86,7 +94,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
                                                 <td>
                                                     <div class="text-uppercase align-middle text-center text-xs font-weight-bold">
                                                         <span class="text-uppercase align-middle text-center text-xs font-weight-bold"><?php echo $n;
-                                                                                                                $n++ ?></span>
+                                                                                                                                        $n++ ?></span>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -131,7 +139,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                                                 <form action="" method="post">
-                                                                <input type="hidden" name="id" value="<?php echo $documento['id_documento']; ?>">
+                                                                    <input type="hidden" name="id" value="<?php echo $documento['id_documento']; ?>">
                                                                     <button name="accion" value="eliminarDocumento" type="submit" class="btn btn-danger">Aceptar</button>
                                                                 </form>
                                                             </div>
@@ -148,11 +156,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
-
             <!--  PAGINADOR PAGINADOR PAGINADOR PAGINADOR PAGINADOR  -->
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
@@ -218,7 +222,44 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
 
             <!--   FIN PAGINADOR FIN PAGINADOR FIN PAGINADOR FIN PAGINADOR FIN PAGINADOR  -->
 
-        <?php require_once(dirname(__DIR__) . '/admin/layout/footer.php');
+            <script>
+                $(buscarDocumento());
+
+                function buscarDocumento(documento) {
+
+                    $.ajax({
+
+                        url: 'buscarDocumento.php',
+                        type: 'POST',
+                        dataType: 'html',
+                        data: {
+                            documento: documento
+                        },
+                        success: function(resultado) {
+
+                            $("#resultadobusqueda").html(resultado);
+
+                        }
+
+
+                    })
+                }
+
+                $(document).on('keyup', '#busquedaDocumento', function() {
+                    var valorBusqueda = $(this).val();
+                    if (valorBusqueda != "") {
+                        $("#tablaDocumentos").hide();
+                        buscarDocumento(valorBusqueda);
+                    } else {
+
+                        
+                        $("#tablaDocumentos").shw();
+                        buscarDocumento();
+                    }
+                })
+            </script>
+
+        <?php require_once('../admin/layout/footer.php');
     } else {
         header("location:../../index.php");
     } ?>

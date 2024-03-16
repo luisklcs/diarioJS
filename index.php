@@ -19,7 +19,7 @@
 				<div class="login100-form-title" style="background-image: url(assets/images/bg-01.jpg);">
 					<span class="login100-form-title-1">
 						Iniciar sesión
-						<p class="login100-form-title-2">Estados judiciales</p>
+						<p class="login100-form-title-2">Notificaciones judiciales</p>
 					</span>
 				</div>
 
@@ -46,7 +46,7 @@
 					</div>
 				</form>
 				<div class="alert alert-primary" role="alert">
-			<?php # print_r($_POST); ?>
+			<?php  #print_r($_POST); ?>
 		</div>
 
 			</div>
@@ -64,18 +64,18 @@
 </html>
 
 <?php
-$dir = dirname(__DIR__);
+
 
 if ($_POST) {
 	
 
-	require 'Controller/sessionController.php';
+	require_once ('Controller/sessionController.php');
 	$mail = $_POST['mail'];
 	$pass = $_POST['pass'];
 
 	$obj = new sessionController();
 	$data = $obj->IniciarSession($mail, $pass);
-
+print_r($data);
 }
 
 

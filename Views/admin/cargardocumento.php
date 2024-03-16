@@ -1,11 +1,11 @@
 <?php
 
-require_once(dirname(__DIR__) . '/admin/layout/links.php');
+require_once('../admin/layout/links.php');
 
 if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
 
-    require_once(dirname(__DIR__) . '../../Controller/clientesController.php');
-    $controller = new clientesController();
+    require_once('../../Controller/documentosController.php');
+    $controller = new documentosController();
 
     date_default_timezone_set('America/Bogota');
     $fecha = date("Y-m-d");
@@ -54,10 +54,11 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
         <?php $opc = "agregardocumento";
         $asd->aside($opc);
 
-        require_once(dirname(__DIR__) . '/admin/layout/header.php');
+        require_once('../admin/layout/header.php');
 
      if (isset($_POST['accion']) && $_POST['accion']== 'subir') {
-        echo "<script> alert('subie...')</script>";
+       # echo "<script> alert('subie...')</script>";
+       $controller->CargarDocumento();
      }
 
 
@@ -67,13 +68,13 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
 
         <div class="container-fluid py-4">
             <div class="row my-4">
-                <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+                <div class="col-lg-12 mb-md-0 mb-4">
                     <div class="card">
                         <div class="card-header pb-0">
                             <div class="row">
                                 <div class="col-lg-12 col-7">
                                     <h3 class="text-uppercase">Cargar Documento</h3>
-                                    <p><?php print_r($_POST)
+                                    <p><?php #print_r($_POST)
                                         ?></p>
                                 </div>
                             </div>
@@ -93,7 +94,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
 
                                 <div class="col-md-5">
                                     <label for="input" class="form-label">Seleccionar archivo</label>
-                                    <input type="file" class="form-control" name="archivo" required>
+                                    <input type="file" class="form-control" name="documento" required>
                                 </div>
 
 
@@ -137,7 +138,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
     <?php
 
 
-    require_once(dirname(__DIR__) . '/admin/layout/footer.php');
+    require_once('../admin/layout/footer.php');
 } else {
     header("location:../../index.php");
 } ?>

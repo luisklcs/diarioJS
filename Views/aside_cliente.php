@@ -36,7 +36,7 @@ class Aside
                 <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
                 <a class="navbar-brand m-0">
                     <img src="assets/img/icon.png" class="navbar-brand-img h-100" alt="main_logo">
-                    <span class="ms-1 font-weight-bold">Estados Judiciales</span>
+                    <span class="ms-1 font-weight-bold">Notificaciones Judiciales</span>
                 </a>
             </div>
 
@@ -70,22 +70,22 @@ class Aside
                         <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Cuenta</h6>
                     </li>
 
-                    <li class="nav-item">
+                  <!--   <li class="nav-item">
                         <a class="nav-link <?php echo $noti ?> " href="notifiicaciones.php">
                             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                                 <img src="assets/icons/bell-solid.svg" alt="">
                             </div>
                             <span class="nav-link-text ms-1">Notificaciones</span>
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo  $estadoC ?> " href="micuenta.php">
+                    </li> -->
+                  <!--   <li class="nav-item">
+                        <a class="nav-link <?php #echo  $estadoC ?> " href="micuenta.php">
                             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                                 <img src="assets/icons/business-time-solid.svg" alt="">
                             </div>
                             <span class="nav-link-text ms-1">Estado de cuenta</span>
                         </a>
-                    </li>
+                    </li> -->
 
                     
 

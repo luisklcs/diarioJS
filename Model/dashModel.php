@@ -5,7 +5,7 @@ class DashModel
     private $PDO;
     public function __construct()
     {
-        require_once(dirname(__DIR__) . '/Config/conexion.php');
+        require_once('../../Config/conexion.php');
 
         $con = new db();
         $this->PDO = $con->conexion();
@@ -18,6 +18,9 @@ class DashModel
       $listar = $this->PDO->prepare($query);
       $listar->execute();
       $clientes['CantidadClientes'] = $listar->fetchColumn();
+      if ($clientes['CantidadClientes']>0) {
+      
+    
   
       #CONTAR DOCUMENTOS
       $query = "SELECT COUNT(*) FROM documentos";
@@ -38,17 +41,18 @@ class DashModel
       $clientes['ClientesInactivos'] = $listar->fetchColumn();
   
       #VISTAS GENERALES
-      $query = "SELECT `asignadasGeneral` FROM `vistas`";
+      $query = "SELECT `vistas_generales` FROM `vistas_generales` WHERE `id_vistas_generales` = 1;";
       $listar = $this->PDO->prepare($query);
       $listar->execute();
-      $clientes['vistasGenerales'] = $listar->fetchColumn();
+      $generales = $listar->fetchColumn();
+      $clientes['vistasGenerales'] = $generales;
   
       #NUM USUARIOS CON VISTAS MAYORES A GENERAL
-      $query = "SELECT COUNT(`asignadas`) FROM vistas Vi INNER JOIN usuarios Us
-      ON Vi.id_usuario = Us.id_usuario WHERE `asignadas`>`asignadasGeneral` AND Us.estadoCuenta = 1 AND Us.rol = 2";
+      $query = "SELECT COUNT(`personalizadas`) FROM config_vistas_usuario cnf INNER JOIN usuarios Us
+      ON cnf.id_usuario = Us.id_usuario WHERE  Us.estadoCuenta = 1 AND Us.rol = 2 AND cnf.personalizadas = 1";
       $listar = $this->PDO->prepare($query);
       $listar->execute();
-      $clientes['mayoresAgeneral'] = $listar->fetchColumn();
+      $clientes['personalizadas'] = $listar->fetchColumn();
   
       #VISTAS NO RESTRINGIDAS
       $query = "SELECT COUNT(`restriccionDeVistas`) FROM `permisos` Pe INNER JOIN usuarios Us
@@ -71,14 +75,26 @@ class DashModel
       $listar->execute();
       $clientes['cobroInactivo'] = $listar->fetchColumn();
       return $clientes;
+      }else{
+       $clientes['CantidadClientes'] = 0;
+       $clientes['CantDocumentos'] = 0;
+       $clientes['ClientesActivos'] = 0;
+       $clientes['ClientesInactivos'] = 0;
+       $clientes['vistasGenerales'] = 0;
+       $clientes['mayoresAgeneral'] = 0;
+       $clientes['norestringidas'] = 0;
+       $clientes['impresion'] = 0;
+       $clientes['cobroInactivo'] = 0;
+       return $clientes;
+      }
     }
    
     public function activas()
     {
 
         #CLIENTES ACTIVOS
-        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`asignadas`
-        FROM `usuarios` Us INNER JOIN vistas Vi ON Vi.`id_usuario` = Us.`id_usuario` WHERE Us.`rol` = 2 AND Us.`estadoCuenta` = 1";
+        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`vistas_asignadas`
+        FROM `usuarios` Us INNER JOIN config_vistas_usuario Vi ON Vi.`id_usuario` = Us.`id_usuario` WHERE Us.`rol` = 2 AND Us.`estadoCuenta` = 1";
         $listar = $this->PDO->prepare($query);
         $listar->execute();
         return $listar;
@@ -88,8 +104,8 @@ class DashModel
     {
 
         #CLIENTES INACTIVOS
-        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`asignadas`
-        FROM `usuarios` Us INNER JOIN vistas Vi ON Vi.`id_usuario` = Us.`id_usuario` WHERE Us.`rol` = 2 AND Us.`estadoCuenta` = 0 ";
+        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`vistas_asignadas`
+        FROM `usuarios` Us INNER JOIN config_vistas_usuario Vi ON Vi.`id_usuario` = Us.`id_usuario` WHERE Us.`rol` = 2 AND Us.`estadoCuenta` = 0 ";
         $listar = $this->PDO->prepare($query);
         $listar->execute();
         return $listar;
@@ -98,8 +114,7 @@ class DashModel
     {
 
         #CLIENTES CON VISTAS PERSONALIZADAS
-        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`asignadas`
-        FROM `usuarios` Us INNER JOIN vistas Vi ON Vi.`id_usuario` = Us.`id_usuario` WHERE Us.`rol` = 2  AND Vi.asignadas>Vi.asignadasGeneral AND Us.`estadoCuenta` = 1";
+        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`vistas_asignadas` FROM `usuarios` Us INNER JOIN config_vistas_usuario Vi ON Vi.`id_usuario` = Us.`id_usuario` WHERE Us.`rol` = 2 AND vi.personalizadas = 1 AND Us.`estadoCuenta` = 1;";
         $listar = $this->PDO->prepare($query);
         $listar->execute();
         return $listar;
@@ -108,8 +123,8 @@ class DashModel
     {
 
         #CLIENTES CON VISTAS PERSONALIZADAS
-        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`asignadas` 
-        FROM `usuarios` Us INNER JOIN vistas Vi ON Vi.`id_usuario` = Us.`id_usuario` INNER JOIN permisos Pe ON Pe.id_usuario = Us.id_usuario
+        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`vistas_asignadas` 
+        FROM `usuarios` Us INNER JOIN config_vistas_usuario Vi ON Vi.`id_usuario` = Us.`id_usuario` INNER JOIN permisos Pe ON Pe.id_usuario = Us.id_usuario
          WHERE Us.`rol` = 2 AND Us.`estadoCuenta` = 1 AND Pe.restriccionDeVistas=0;";
         $listar = $this->PDO->prepare($query);
         $listar->execute();
@@ -119,8 +134,8 @@ class DashModel
     {
 
         #CLIENTES CON VISTAS PERSONALIZADAS
-        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`asignadas`
-         FROM `usuarios` Us INNER JOIN vistas Vi ON Vi.`id_usuario` = Us.`id_usuario` INNER JOIN permisos Pe ON Pe.id_usuario = Us.id_usuario
+        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`vistas_asignadas`
+         FROM `usuarios` Us INNER JOIN config_vistas_usuario Vi ON Vi.`id_usuario` = Us.`id_usuario` INNER JOIN permisos Pe ON Pe.id_usuario = Us.id_usuario
           WHERE Us.`rol` = 2 AND Us.`estadoCuenta` = 1 AND Pe.impresion = 1;";
         $listar = $this->PDO->prepare($query);
         $listar->execute();
@@ -130,8 +145,8 @@ class DashModel
     {
 
         #CLIENTES CON VISTAS PERSONALIZADAS
-        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`asignadas`
-         FROM `usuarios` Us INNER JOIN vistas Vi ON Vi.`id_usuario` = Us.`id_usuario` INNER JOIN permisos Pe ON Pe.id_usuario = Us.id_usuario
+        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`vistas_asignadas`
+         FROM `usuarios` Us INNER JOIN config_vistas_usuario Vi ON Vi.`id_usuario` = Us.`id_usuario` INNER JOIN permisos Pe ON Pe.id_usuario = Us.id_usuario
           WHERE Us.`rol` = 2 AND Us.`estadoCuenta` = 1 AND Pe.cobro=0;";
         $listar = $this->PDO->prepare($query);
         $listar->execute();
@@ -144,16 +159,15 @@ class DashModel
         $nuevo = $d->limpiarDato($nvo);
 
         #ACTUALIZAR GENERALES
-        $query = "UPDATE vistas SET `asignadasGeneral` = :nuevo";
+        $query = "UPDATE vistas_generales SET `vistas_generales` = :nuevo";
         $nuevovalor = $this->PDO->prepare($query);
         $nuevovalor ->bindParam(':nuevo',$nuevo,PDO::PARAM_INT);
         $nuevovalor->execute();
        
         #ACTUALIZAR ASIGNADAS 
-        $query = "UPDATE vistas SET `asignadas` = :nuevo WHERE `asignadas` = :actual";
+        $query = "UPDATE `config_vistas_usuario` SET `vistas_asignadas` = :nuevo WHERE `personalizadas` = 0";
         $asiignadas = $this->PDO->prepare($query);
         $asiignadas ->bindParam(':nuevo',$nuevo,PDO::PARAM_INT);
-        $asiignadas ->bindParam(':actual',$actual,PDO::PARAM_INT);
         $asiignadas->execute();
        
         if ($nuevovalor->rowCount()>0 && $asiignadas->rowCount()>0) {

@@ -5,8 +5,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 2 ) {
     include 'aside_cliente.php';
     $asd = new Aside();
    
-require_once(dirname(__DIR__) . '/Controller/documentosController.php');
-#$dir = dirname(__DIR__) . '\Controller\documentosController.php';
+require_once('/Controller/documentosController.php');
 $documentos = new DocumentosController();
 $cantidadDocumentos = $documentos->contar();
 

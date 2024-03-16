@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ejemplo de notificaciones push con Firebase Cloud Messaging</title>
+	<!-- Incluye las bibliotecas de Firebase -->
+<!-- 	<script src="https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.1.1/firebase-messaging.js"></script>
+	<script>
+		// Configura tu proyecto de Firebase
+		var firebaseConfig = {
+			// Aquí debes incluir la configuración de tu proyecto de Firebase
+		};
+		firebase.initializeApp(firebaseConfig);
+
+		// Obtiene la instancia de Firebase Messaging
+		const messaging = firebase.messaging();
+
+		// Solicita permiso para recibir notificaciones push
+		messaging.requestPermission()
+			.then(() => {
+				console.log('Permiso para recibir notificaciones push concedido.');
+				// Aquí puedes suscribir al usuario a un tema o enviar su token de registro al servidor
+			})
+			.catch((error) => {
+				console.log('Error al solicitar permiso para recibir notificaciones push:', error);
+			});
+
+		// Maneja el evento onclick del botón
+		function enviarNotificacion() {
+			// Aquí debes incluir el código para enviar la notificación push
+			console.log('Enviar notificación push');
+		}
+	</script> -->
+
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyAnEJuFPFtuWTa4r27_-sRJNECUOSjfxTs",
+          authDomain: "faviolavillalba-31244.firebaseapp.com",
+          projectId: "faviolavillalba-31244",
+          storageBucket: "faviolavillalba-31244.appspot.com",
+          messagingSenderId: "518866592986",
+          appId: "1:518866592986:web:00478d895f5c77d2f6b1e3",
+          measurementId: "G-1KD55TS29D"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+      </script>
+</head>
+<body>
+	<h1>Ejemplo de notificaciones push con Firebase Cloud Messaging</h1>
+	<p>Haz clic en el botón para enviar una notificación push.</p>
+	<button onclick="enviarNotificacion()">Enviar notificación push</button>
+</body>
+</html>

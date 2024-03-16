@@ -1,8 +1,8 @@
 <?php
 include_once 'global/header.php';
-require_once(dirname(__DIR__) . '\Controller\documentosController.php');
-$dir = dirname(__DIR__) . '\Controller\documentosController.php';
-require_once dirname(__DIR__) . '\Views\global\scripts.php';
+require_once('\Controller\documentosController.php');
+$dir = '\Controller\documentosController.php';
+require_once '\Views\global\scripts.php';
 $obj = new DocumentosController();
 $lista = $obj->listar();
 if ($_POST) {

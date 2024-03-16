@@ -8,7 +8,7 @@ class loginModel
 
     public function __construct()
     {
-        require_once(dirname(__DIR__) . '/Config/conexion.php');
+        require_once('Config/conexion.php');
        
         $con = new db();
         $this->PDO = $con->conexion();

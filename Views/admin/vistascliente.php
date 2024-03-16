@@ -1,45 +1,56 @@
 <?php
-require_once(dirname(__DIR__) . '/admin/layout/links.php');
+require_once('../admin/layout/links.php');
 if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1 ) {
-require_once(dirname(__DIR__) . '../../Controller/clientesController.php');
+require_once('../../Controller/clientesController.php');
 $controller = new clientesController();
 include 'aside.php';
 $asd = new Aside();
 
-$id =   $_SESSION['id'];
+
 if (!isset($_SESSION['id'])) {
    header("location:clientes.php");
 } else {
-$data = $controller->cargarVistas($id);
+$data = $controller->cargarVistas(); 
+
 
 
     
     ?>
-<?php #require_once(dirname(__DIR__) . '/admin/layout/buscar.php'); 
-?>
+
 <link rel="icon" href="../assets/img/icon.png" type="image/png">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <body class="g-sidenav-show  bg-gray-100">
     <?php $opc = "";
     $asd->aside($opc);
-    require_once(dirname(__DIR__) . '/admin/layout/header.php');
+    require_once('../admin/layout/header.php');
     ?>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
         <div class="row my-4">
             <!-- LISTA DE CLIENTES LISTA DE CLIENTES LISTA DE CLIENTES LISTA DE CLIENTES LISTA DE CLIENTES -->
-            <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+            <div class="col-lg-12 mb-md-0 mb-4">
                 <div class="card">
                     <div class="card-header pb-0">
                         <div class="row">
+                            <?php
+                             if ($data == 0) {
+                                ?>
+                                <div class="col-lg-12 col-7">
+                                <h3 class="text-uppercase ">Este cliente no tiene visualizaciones de documentos</h3>
+                                
+                            </div>
+                            <?php
+                             } else {
+                              ?>
+
+                            
                             <div class="col-lg-6 col-7">
-                                <h6 class="text-uppercase ">Lista de documentos visualizados por el cliente</h6>
-                                <p class="text-sm mb-2">
-                                    Mostrando <?php #print_r($data['n']) ?> registros de
+                                <h6 class="text-uppercase ">Lista de documentos visualizados por el cliente: <?php #$name = $data;$name = $name->fetch(PDO::FETCH_ASSOC);  echo $name['nombreUsuario']." ".$name['apellidos']  ?></h6>
+                               
                                     <span class="font-weight-bold ms-1">
-                                        <?php #print_r($cantidadClientes); ?>
-                                    </span>documentos visualizados <i class="fa fa-check text-info" aria-hidden="true"></i>
-                                </p>
+                                     
+                                    </span>Documentos visualizados <i class="fa fa-check text-info" aria-hidden="true"></i>
+                             
                             </div>
                       
                         </div>
@@ -61,9 +72,9 @@ $data = $controller->cargarVistas($id);
                                 <tbody>
                                     <?php
                                     $n = 1;
-                                  
-                             
-                                  while ($cliente = $data->fetch(PDO::FETCH_ASSOC)) {
+                                
+                                 
+                            while ($cliente = $data->fetch(PDO::FETCH_ASSOC)) {
                                     ?>
                                         <tr>
                                             <td>
@@ -74,43 +85,43 @@ $data = $controller->cargarVistas($id);
                                             </td>
                                             <td>
                                                 <div class="align-middle text-center text-sm  py-1">
-                                                    <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['fecha']) ?></span>
+                                                    <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['nombre_doc']) ?></span>
                                                 </div>
                                             </td>
 
                                             <td>
                                                 <div class="align-middle text-center text-sm  py-1">
-                                                    <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['asignadas']) ?></span>
+                                                    <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['vistas_asignadas']) ?></span>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="align-middle text-center text-sm  py-1">
-                                                    <span class=" text-xs font-weight-bold"><?php echo ($cliente['vistasUsadas']) ?></span>
+                                                    <span class=" text-xs font-weight-bold"><?php echo ($cliente['total_vistas_usadas']) ?></span>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="align-middle text-center text-sm  py-1">
-                                                    <span class=" text-xs font-weight-bold"><?php echo ($cliente['vistasHoy']) ?></span>
+                                                    <span class=" text-xs font-weight-bold"><?php echo ($cliente['vistas_usadas_hoy']) ?></span>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="align-middle text-center text-sm  py-1">
-                                                    <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['fechaPrimerVista']) ?></span>
+                                                    <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['fecha_primera_vista']) ?></span>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="align-middle text-center text-sm  py-1">
-                                                    <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['fechaUltimaVista']) ?></span>
+                                                    <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['fecha_ultima_vista']) ?></span>
                                                 </div>
                                             </td>
 
 
                                        
 
-                                        </tr>
-                                    <?php
-                                    } 
-                                    ?>
+                                            </tr>
+                                        <?php
+                           }  
+                            ?>
                                 </tbody>
                             </table>
                         </div>
@@ -159,9 +170,9 @@ $data = $controller->cargarVistas($id);
 
 
         <!--   FIN PAGINADOR FIN PAGINADOR FIN PAGINADOR FIN PAGINADOR FIN PAGINADOR  -->
-
+     
         <?php
-    
+                             }
         if (isset($_POST['accion'])) {
 
             switch ($_POST['accion']) {
@@ -205,7 +216,7 @@ $data = $controller->cargarVistas($id);
                     break;
             }
         }
-        require_once(dirname(__DIR__) . '/admin/layout/footer.php');
+        require_once('../admin/layout/footer.php');
     }} else {
         header("location:../../index.php");
     }  ?>
