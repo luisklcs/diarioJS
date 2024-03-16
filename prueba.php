@@ -1,3 +1,4 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php
 
 define("SERVIDOR", "localhost");
@@ -37,6 +38,9 @@ try {
 } catch (PDOException $e) {
     // echo "<script>alert('Error...')</script>" ;
 }
+
+
+
 
 
 
@@ -196,5 +200,29 @@ VALUES (NULL, '".$info_vistas['id_usuario']."', '".$info_vistas['id_documento']-
 } */
 
 
+?>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <?php
+require(dirname(__DIR__).'/NotificacionesJudicialesSincelejo/assets/alerts.php');
 
+$alertas = new Alertas();
+$alertas->mostrarAlerta('success', 'Eliminado!', 'Artículo eliminado sasvavav!'); 
+    ?>
+ <script type="text/javascript">
+
+/* Swal.fire({
+    icon: 'success',
+    title: 'Eliminado!',
+    text: 'Artículo eliminado correctamente!',
+}) */
+</script>
+</body>
+</html>

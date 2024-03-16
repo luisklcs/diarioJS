@@ -1,6 +1,5 @@
 <?php
-require_once('../../Model/dashModel.php');
-require_once('../../Controller/alertas.php');
+require_once(dirname(__DIR__).'/Model/dashModel.php');
 class DashController
 {
 

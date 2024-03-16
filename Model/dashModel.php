@@ -5,8 +5,7 @@ class DashModel
     private $PDO;
     public function __construct()
     {
-        require_once('../../Config/conexion.php');
-
+        require_once(dirname(__DIR__).'/Config/conexion.php');
         $con = new db();
         $this->PDO = $con->conexion();
     }

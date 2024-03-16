@@ -1,6 +1,7 @@
 <?php
-require_once(dirname(__DIR__) . '../Model/documentosModel.php');
-require_once(dirname(__DIR__) . '/Controller/alertas.php');
+
+require_once(dirname(__DIR__) . '/Model/documentosModel.php');
+require_once(dirname(__DIR__) . '/assets/alerts.php');
 
 
 class DocumentosController
@@ -40,14 +41,13 @@ class DocumentosController
 
   public function verDocCliente($id)
   {
-    
+
     $data = $this->objDocumento->visualizarDocumentoCliente($id);
-   
-   $_SESSION['documento'] = $data;
+
+    $_SESSION['documento'] = $data;
     $_SESSION['visitado'] = true;
-   /*  echo "<script> location.href = '../views/web/viewer.php?file=" . $data['pdf'] . "'; </script> "; */
-     echo "<script> location.href = '../visualizer/web/viewer.php?file=" . $data['pdf'] . "'; </script> "; 
-   # print_r($data);
+    echo "<script> location.href = '../visualizer/web/viewer.php?file=" . $data['pdf'] . "'; </script> ";
+   
   }
 
 
@@ -65,7 +65,7 @@ class DocumentosController
       $base = "../../63db127930f4a/";
       mkdir("$base" . $uniqueFolderName);
       $dir = $base . $uniqueFolderName . "/";
-     
+
 
       $fecha = $_POST['fecha'];
       $nombreDoc = $_POST['nombre'];
@@ -76,16 +76,17 @@ class DocumentosController
       $ruta  = $file["tmp_name"];
 
       if ($tipo != "application/pdf") {
-        return $this->alerta->documentoIncorrecto();
+       return $this->alerta->mostrarAlerta('warning', 'Advertencia!', 'El tipo de documento que intenta cargar tiene un formato incorrecto, asegúrese que sea de tipo pdf!');        
       } else {
         $src = $dir . $nombre;
         if (move_uploaded_file($ruta, $src)) {
-          $src = "../63db127930f4a/".$uniqueFolderName."/".$nombre ; 
+          $src = "../63db127930f4a/" . $uniqueFolderName . "/" . $nombre;
           $d = $this->objDocumento->cargarDocumento($nombreDoc, $fecha, $src);
           if ($d == true) {
-            return $this->alerta->documentoCargadoCorrectamente();
+            return $this->alerta->mostrarAlerta('success', 'Documento guardado!', 'El documento se ha cargado correctamente!');
+      
           } else {
-            return $this->alerta->documentoNoCargado();
+            return $this->alerta->mostrarAlerta('error', 'Error!', 'EOcurrió un error al cargar el documento, por favor intente nuevamente!');
           }
         }
       }
@@ -94,6 +95,6 @@ class DocumentosController
 
   public function vistasDocumento($idDoc)
   {
-   return $this->objDocumento->vistasDocumento($idDoc);
+    return $this->objDocumento->vistasDocumento($idDoc);
   }
 }

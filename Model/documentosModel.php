@@ -7,8 +7,8 @@ class ModelDocumentos
 
   public function __construct()
   {
-    require_once(dirname(__DIR__) . '../Config/conexion.php');
-    require_once(dirname(__DIR__) . '../Controller/limpiar.php');
+    require_once(dirname(__DIR__).'/Config/conexion.php');
+    require_once(dirname(__DIR__) . '/Controller/limpiar.php');
     $con = new db();
     $this->PDO = $con->conexion();
   }
@@ -184,16 +184,6 @@ class ModelDocumentos
     $data['asignadas'] = $asignadas;
     $data['TotalUsadas'] = $vistasUsadas;
     return $data;
-/*  if ($asignadas >= $vistasUsadas) {
 
-        return "vistas-usadas";
-      }
-      if ($vistasUsadas < $asignadas) {
-
-        return "menores";
-      }
-    else {
-      return "no-visualizado";
-    }  */
   }
 }

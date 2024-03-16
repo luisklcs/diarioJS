@@ -13,6 +13,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
     $data['vistas'] = $_SESSION['cliente']['vistas'];
 ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="../assets/img/icon.png" type="image/png">
     <style>
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {

@@ -6,21 +6,19 @@ class sessionController
     {
         require_once('Model/sessionModel.php');
         require_once('Controller/limpiar.php');
-        require_once('Controller/alertas.php');
+        require_once(dirname(__DIR__) . '/assets/alerts.php');
+
         $usr = new loginModel();
         $alertas = new Alertas();
 
         $mail = limpiarDato($mail);
         $user = $usr->autenticacion($mail, $pass);
 
-
-
-
         if ($user == false) {
-            $a = $alertas->errorSesion();
+            $a = $alertas->mostrarAlerta('warning', 'Error!', 'Usuario o contraseña incorrectos!');
             echo $a;
         } else {
-          
+
             $random_bytes = random_bytes(32);
             $session_id = bin2hex($random_bytes);
             session_id($session_id);
@@ -35,11 +33,12 @@ class sessionController
                 }
 
                 if ($user['rol'] == 2) {
-                     print_r($_SESSION['user']);  return header("location:../Views/documentos.php");
+                    print_r($_SESSION['user']);
+                    return header("location:../Views/documentos.php");
                 }
             } else {
-                $a = $alertas->cuentadesactivada();
-                echo $a;
+
+             $alertas->mostrarAlerta('warning', 'Cuenta desactivada!', 'Su cuenta se encuentra desactivada, por favor contacte al proveedor del servicio!');
             }
         }
     }

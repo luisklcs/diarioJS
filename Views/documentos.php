@@ -1,5 +1,5 @@
 <?php
-include 'global/links.php';
+require_once(dirname(__DIR__).'/Views/global/links.php');
 if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 2) {
     include 'aside_cliente.php';
     $asd = new Aside();
@@ -35,7 +35,8 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 2) {
     <body class="g-sidenav-show  bg-gray-100">
         <?php $opc = "documentos";
         $asd->aside($opc);
-        require_once 'global/header.php';
+        
+        require_once(dirname(__DIR__).'/Views/global/header.php');
         ?>
         <div class="container-fluid py-4">
 
@@ -215,28 +216,8 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 2) {
             </script>
 
 
-            <footer class="footer pt-3  ">
-                <div class="container-fluid">
-                    <div class="row align-items-center justify-content-lg-between">
-                        <div class="col-lg-6 mb-lg-0 mb-4">
-                            <div class="copyright text-center text-sm text-muted text-lg-start">
-                                © <script>
-                                    document.write(new Date().getFullYear())
-                                </script>,
-                                Fabiolavillalba.com | Todos los derechos reservados
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <!--   FIN PAGINADOR FIN PAGINADOR FIN PAGINADOR FIN PAGINADOR FIN PAGINADOR  -->
-
-            </footer>
-        </div>
-
-
     <?php
-    require_once 'global/footer.php';
+ require_once(dirname(__DIR__).'/Views/global/footer.php');
 } else {
     header("location:../../index.php");
 } ?>

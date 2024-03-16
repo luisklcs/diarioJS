@@ -1,5 +1,5 @@
 <?php
-include 'global/links.php';
+require_once(dirname(__DIR__).'/Views/global/links.php');
 
 
 
@@ -8,7 +8,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 2) {
   date_default_timezone_set('America/Bogota');
 
 
-  require_once('/Controller/clientesController.php');
+  require_once(dirname(__DIR__).'/Controller/clientesController.php');
   $controller = new clientesController();
 
   $data = $controller->infoCuentaCliente($_SESSION['user']['id_usuario']);

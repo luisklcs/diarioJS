@@ -1,10 +1,10 @@
 <?php
 
-require_once('../admin/layout/links.php');
+require_once(dirname(dirname(__DIR__)) . '/Views/admin/layout/links.php');
 
 if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
 
-    require_once('../../Controller/documentosController.php');
+    require_once(dirname(dirname(__DIR__)) . '/Controller/documentosController.php');
     $controller = new documentosController();
 
     date_default_timezone_set('America/Bogota');
@@ -46,7 +46,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
     include 'aside.php';
     $asd = new Aside();
 ?>
-  
+
     <link rel="icon" href="../assets/img/icon.png" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -54,12 +54,12 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
         <?php $opc = "agregardocumento";
         $asd->aside($opc);
 
-        require_once('../admin/layout/header.php');
+        require_once(dirname(__DIR__).'/admin/layout/header.php');
 
-     if (isset($_POST['accion']) && $_POST['accion']== 'subir') {
-       # echo "<script> alert('subie...')</script>";
-       $controller->CargarDocumento();
-     }
+        if (isset($_POST['accion']) && $_POST['accion'] == 'subir') {
+            # echo "<script> alert('subie...')</script>";
+            $controller->CargarDocumento();
+        }
 
 
         ?>
@@ -138,7 +138,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
     <?php
 
 
-    require_once('../admin/layout/footer.php');
+    require_once(dirname(__DIR__).'/admin/layout/footer.php');
 } else {
     header("location:../../index.php");
 } ?>

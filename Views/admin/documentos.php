@@ -1,7 +1,7 @@
 <?php
-require_once('../admin/layout/links.php');
+require_once(dirname(__DIR__).'/admin/layout/links.php');
 if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
-    require_once('../../Controller/documentosController.php');
+    require_once(dirname(dirname(__DIR__)).'/Controller/documentosController.php');
 
     $controller = new DocumentosController();
 
@@ -259,7 +259,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
                 })
             </script>
 
-        <?php require_once('../admin/layout/footer.php');
+        <?php require_once(dirname(__DIR__).'/admin/layout/footer.php');
     } else {
         header("location:../../index.php");
     } ?>

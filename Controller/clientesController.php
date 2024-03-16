@@ -1,6 +1,6 @@
 <?php
 
-require_once('../../Model/clientesModel.php');
+require_once(dirname(__DIR__).'/Model/clientesModel.php');
 
 class clientesController
 {

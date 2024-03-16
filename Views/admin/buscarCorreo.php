@@ -1,6 +1,6 @@
 <?php
 
-require_once('../../Config/conexion.php');
+require_once(dirname(dirname(__DIR__)).'/Config/conexion.php');
 $con = new db();
 $PDO = $con->conexion();
 

@@ -1,9 +1,9 @@
 <?php
-require_once('../admin/layout/links.php');
+require_once(dirname(__DIR__).'/admin/layout/links.php');
 
 if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
 
-    require_once('../../Controller/clientesController.php');
+    require_once(dirname(dirname(__DIR__)) . '/Controller/clientesController.php');
     $controller = new clientesController();
     if (isset($_SESSION['cliente'])) {
         unset($_SESSION['cliente']);
@@ -30,7 +30,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
     <body class="g-sidenav-show  bg-gray-100">
         <?php $opc = "clientes";
         $asd->aside($opc);
-        require_once('../admin/layout/header.php');
+        require_once(dirname(__DIR__).'/admin/layout/header.php');
         ?>
         <!-- End Navbar -->
         <div class="container-fluid py-4">
@@ -296,7 +296,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
                     break;
             }
         }
-        require_once('../admin/layout/footer.php');
+        require_once(dirname(__DIR__).'/admin/layout/footer.php');
     } else {
         header("location:../../index.php");
     } ?>

@@ -1,8 +1,9 @@
 <?php
-require_once('../admin/layout/links.php');
+require_once(dirname(__DIR__).'/admin/layout/links.php');
 if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
-    require_once('../../Controller/clientesController.php');
-    require_once('../../Controller/dashController.php');
+    require_once(dirname(dirname(__DIR__)).'/Controller/clientesController.php');
+    require_once(dirname(dirname(__DIR__)).'/Controller/dashController.php');
+    
     $controller = new DashController();
     $dash = $controller->dashboard();
     $clientesController = new clientesController();
@@ -453,7 +454,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
             }
         }
 
-        require_once('../admin/layout/footer.php');
+        require_once(dirname(__DIR__).'/admin/layout/footer.php');
     } else {
         header("location:../../index.php");
     }

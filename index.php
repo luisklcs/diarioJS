@@ -74,8 +74,8 @@ if ($_POST) {
 	$pass = $_POST['pass'];
 
 	$obj = new sessionController();
-	$data = $obj->IniciarSession($mail, $pass);
-print_r($data);
+	$obj->IniciarSession($mail, $pass);
+
 }
 
 

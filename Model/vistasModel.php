@@ -49,8 +49,8 @@ if ($_SESSION['user']['rol'] == 1) {
  function ajustarVistas()
 {
     date_default_timezone_set('America/Bogota');
-    require_once('../Config/conexion.php');
-    require_once('../Controller/limpiar.php');
+    require_once(dirname(__DIR__).'/Config/conexion.php');
+    require_once(dirname(__DIR__).'/Controller/limpiar.php');
 
     #INSTANCIA DE LA CONEXION
     $con = new db();
