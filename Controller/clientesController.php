@@ -1,6 +1,7 @@
 <?php
 
 require_once(dirname(__DIR__).'/Model/clientesModel.php');
+require_once(dirname(__DIR__) . '/assets/alerts.php');
 
 class clientesController
 {
@@ -8,12 +9,13 @@ class clientesController
   public $vista;
   public $cantidad;
   public $objCliente;
-
+  public $alerta;
   public function __construct()
   {
     $this->vista = "listar";
     $this->tituloPagina = "";
     $this->objCliente = new Clientes();
+    $this->alerta = new Alertas();
   }
 
   public function contar()
@@ -51,7 +53,10 @@ class clientesController
   }
   public function eliminarCliente($idCliente)
   {
-    return $this->objCliente->eliminarCliente($idCliente);
+    if ($this->objCliente->eliminarCliente($idCliente) == true) {
+      return $this->alerta->mostrarAlerta('success', 'Genial!😍', 'Cliente eliminado exitosamente!');
+       } else{
+        return $this->alerta->mostrarAlerta('error', 'Algo anda mal😢', 'No se pudo eliminara el cliente, por favor intentalo nuevamente!');  }
   }
 
   public function cargarVistas()

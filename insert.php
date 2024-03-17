@@ -1,10 +1,10 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php
 
-define("SERVIDOR", "localhost");
-define("USUARIO", "root");
-define("PASSWORD", "");
-define("BD", "u904935864_Ddjus1nc13j0");
+define("SERVIDOR", "127.0.0.1:3306");
+define("USUARIO", "u822807031_anteriior");
+define("PASSWORD", "f4H~9b&KxO*");
+define("BD", "u822807031_anterior");
 
 $servidor = "mysql:host=" . SERVIDOR . ";dbname=" . BD;
 try {
@@ -20,10 +20,10 @@ try {
     // echo "<script>alert('Error...')</script>" ;
 }
 
-define("N_SERVIDOR", "localhost");
-define("N_USUARIO", "root");
-define("N_PASSWORD", "");
-define("N_BD", "diariojucicialnueva");
+define("N_SERVIDOR", "127.0.0.1:3306");
+define("N_USUARIO", "u822807031_u822807031");
+define("N_PASSWORD", "f4H~9b&KxO*");
+define("N_BD", "u822807031_D14r10Nu3v4");
 
 $servidor = "mysql:host=" . N_SERVIDOR . ";dbname=" . N_BD;
 try {
@@ -46,7 +46,7 @@ try {
 
 
 # >--------- MIGRAR USUARIOS A LA NUEBA BD ----------------->
-/* 
+ 
 $query = "SELECT * FROM `usuarios`";
 $docs = $conexion->prepare($query);
 $docs->execute();
@@ -59,7 +59,47 @@ foreach ($data as $key => $Usuario) {
   #  print_r($Usuario);
 
     $fecha_registro = $Usuario['fecha_registro'];
-    $fecha_cobro = substr($fecha_registro, -2);
+    $fecha_registro = $Usuario['fecha_registro'];
+   
+    // Obtener el año actual
+    $anio_actual = date('Y');
+
+    // Obtener el mes actual
+    $mes_actual = date('m');
+    $mes_siguiente = date('m', strtotime('+1 month', mktime(0, 0, 0, $mes_actual, 1)));
+
+    $dia_actual = date('d');
+ 
+
+    $mes_registro = date('m', strtotime($fecha_registro));
+    $dia_registro = date('d', strtotime($fecha_registro));
+
+    if ($mes_registro > $mes_actual) {
+
+        if ($dia_actual > $dia_registro) {
+            $fecha_cobro = $anio_actual . '-' . $mes_siguiente . '-' . $dia_registro;
+        } else {
+            $fecha_cobro = $anio_actual . '-' . $mes_actual . '-' . $dia_registro;
+        }
+       
+
+    } elseif ($mes_registro < $mes_actual) {
+
+        echo "<pre>";
+        if ($dia_actual > $dia_registro) {
+            $fecha_cobro = $anio_actual . '-' . $mes_siguiente . '-' . $dia_registro;
+        } else {
+            $fecha_cobro = $anio_actual . '-' . $mes_actual . '-' . $dia_registro;
+        }
+       
+    } elseif ($mes_registro = $mes_actual) {
+        if ($dia_actual > $dia_registro) {
+            $fecha_cobro = $anio_actual . '-' . $mes_siguiente . '-' . $dia_registro;
+        } else {
+            $fecha_cobro = $anio_actual . '-' . $mes_actual . '-' . $dia_registro;
+        }
+      
+    }
 
     #<--------------Iniciar transacción para ejecutar todas las consultas ----------->
     try {
@@ -108,19 +148,19 @@ foreach ($data as $key => $Usuario) {
 
         $bd_nueva->commit();
         echo "<pre>"; 
-        echo "Usuario registrado";
+        echo "Permisos de Usuario asignados correctamente con id: ".$bd_nueva->lastInsertId();
     } catch (Exception $e) {
         $bd_nueva->rollBack();
         echo "Usuario No registrado " . $e->getMessage();
     }
 }
 
-echo "</pre>";  */
+echo "</pre>";  
 
 
 
 #<---------------- CONFIGURAR VISTAS DE USUARIO  ------------------------->
-/* $query = "SELECT * FROM `usuarios`";
+ $query = "SELECT * FROM `usuarios`";
 $usuarios = $bd_nueva->prepare($query);
 $usuarios->execute();
 
@@ -133,9 +173,9 @@ foreach ($users as $key => $usuario) {
     $query = "INSERT INTO `config_vistas_usuario` (`id_config_vista`, `id_usuario`, `vistas_asignadas`, `personalizadas`) VALUES (NULL, '.$id.', '3', '0')";
     $ins = $bd_nueva->prepare($query);
    if ($ins->execute()) {
-   echo "Insertado";
+   echo "Configuración asignada correctamente con id: ".$bd_nueva->lastInsertId();
    }
-} */
+} 
 
 
 
@@ -144,7 +184,7 @@ foreach ($users as $key => $usuario) {
 
 
 # ------------- INSERTAR DOCUMENTOS EN LA NUEVA BD ----------------->
-/* $query = "SELECT * FROM `documentos`";
+ $query = "SELECT * FROM `documentos`";
 $get_documents = $conexion->prepare($query);
 $get_documents->execute();
 
@@ -165,11 +205,11 @@ foreach ($data as $key => $info_documento) {
     echo $key." Documento insertado con id: ". $bd_nueva->lastInsertId();
    }
    echo "</pre>";
-} */
+} 
 
 
  #<---------------- LEER VISTAS EN BD ANTERIOR ------------------------->
-/* 
+ 
 $query = "SELECT * FROM `vistas`";
 
 $data_vistas = $conexion->prepare($query);
@@ -194,35 +234,11 @@ VALUES (NULL, '".$info_vistas['id_usuario']."', '".$info_vistas['id_documento']-
  $insert_vistas ->execute();
 
  if ($insert_vistas->rowCount()>0) {
-    echo "Insertado Correctamente...";
+    echo "Vista Insertada Correctamente con id: ".$bd_nueva->lastInsertId();
  }
     echo "</pre>";
-} */
+} 
 
 
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <?php
-require(dirname(__DIR__).'/NotificacionesJudicialesSincelejo/assets/alerts.php');
-
-$alertas = new Alertas();
-$alertas->mostrarAlerta('success', 'Eliminado!', 'Artículo eliminado sasvavav!'); 
-    ?>
- <script type="text/javascript">
-
-/* Swal.fire({
-    icon: 'success',
-    title: 'Eliminado!',
-    text: 'Artículo eliminado correctamente!',
-}) */
-</script>
-</body>
-</html>

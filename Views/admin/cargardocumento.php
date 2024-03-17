@@ -1,3 +1,11 @@
+<script type="text/javascript">
+  setTimeout(function() {
+    if (window.history.replaceState) {
+      console.log("prueba");
+      window.history.replaceState(null, null, window.location.href);
+    }
+  }, 1500);
+</script>
 <?php
 
 require_once(dirname(dirname(__DIR__)) . '/Views/admin/layout/links.php');

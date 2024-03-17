@@ -13,22 +13,22 @@ class ModelDocumentos
     $this->PDO = $con->conexion();
   }
 
-  public function contarDocumentos()
+  public function contarDocumentos($fechaRegistro)
   {
-    $query = "SELECT COUNT(*) FROM documentos";
+    $query = "SELECT COUNT(*) FROM `documentos` WHERE `fecha` >= '".$fechaRegistro."'";
     $stmt = $this->PDO->prepare($query);
     $stmt->execute();
     $numeroDocumentos = $stmt->fetchColumn();
     return $numeroDocumentos;
   }
 
-  public function listarDocumentos($i, $l)
+  public function listarDocumentos($i, $l , $fecha)
   {
 
     $inicio = limpiarDato($i);
     $limite = limpiarDato($l);
 
-    $query = 'SELECT  * FROM `documentos` ORDER BY `fecha` DESC  LIMIT ' . $inicio . ',' . $limite . '';
+    $query = 'SELECT * FROM `documentos` WHERE `fecha` >= '.$fecha.' ORDER BY `fecha` DESC  LIMIT ' . $inicio . ',' . $limite . '';
     $listar = $this->PDO->prepare($query);
     $listar->execute();
     $documentos['docs'] = $listar;

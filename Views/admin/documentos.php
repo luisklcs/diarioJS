@@ -1,7 +1,9 @@
 <?php
-require_once(dirname(__DIR__).'/admin/layout/links.php');
+require_once(dirname(__DIR__) . '/admin/layout/links.php');
 if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
-    require_once(dirname(dirname(__DIR__)).'/Controller/documentosController.php');
+    require_once(dirname(dirname(__DIR__)) . '/Controller/documentosController.php');
+    require_once(dirname(dirname(__DIR__)) . '/assets/alerts.php');
+    $alerta = new Alertas();
 
     $controller = new DocumentosController();
 
@@ -64,7 +66,26 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
                                     break;
 
                                 case 'eliminarDocumento':
-                                    $controller->borrarDocumento($id);
+                                    $a =  $controller->borrarDocumento($id);
+
+                                    if ($a == 1) {
+                                        $alerta->mostrarAlerta('success', 'Eliminado!', 'Documento eliminado correctamente!!');
+                                        echo '<script type="text/javascript">
+                                          setTimeout(function() {
+                                              location.reload();
+                                              }, 1500);
+                                              </script>';
+                                        $a = null;
+                                    }
+                                    if ($a = 0) {
+                                        $alerta->mostrarAlerta('Error', 'Error al eliminar!', 'No se pudo eliminar el documento!');
+                                        echo '<script type="text/javascript">
+                                        setTimeout(function() {
+                                            location.reload();
+                                            }, 1500);
+                                            </script>';
+                                        $a = null;
+                                    }
                                     break;
                             }
                         }
@@ -221,6 +242,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
 
 
             <!--   FIN PAGINADOR FIN PAGINADOR FIN PAGINADOR FIN PAGINADOR FIN PAGINADOR  -->
+           
 
             <script>
                 $(buscarDocumento());
@@ -252,14 +274,14 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
                         buscarDocumento(valorBusqueda);
                     } else {
 
-                        
+
                         $("#tablaDocumentos").shw();
                         buscarDocumento();
                     }
                 })
             </script>
 
-        <?php require_once(dirname(__DIR__).'/admin/layout/footer.php');
+        <?php require_once(dirname(__DIR__) . '/admin/layout/footer.php');
     } else {
         header("location:../../index.php");
     } ?>

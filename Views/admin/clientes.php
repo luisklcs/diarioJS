@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__).'/admin/layout/links.php');
+require_once(dirname(__DIR__) . '/admin/layout/links.php');
 
 if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
 
@@ -27,10 +27,11 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
     <link rel="icon" href="../assets/img/icon.png" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
     <body class="g-sidenav-show  bg-gray-100">
         <?php $opc = "clientes";
         $asd->aside($opc);
-        require_once(dirname(__DIR__).'/admin/layout/header.php');
+        require_once(dirname(__DIR__) . '/admin/layout/header.php');
         ?>
         <!-- End Navbar -->
         <div class="container-fluid py-4">
@@ -58,14 +59,13 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
                                         <input type="text" class="form-control" name="busquedaCliente" id="busquedaCliente" placeholder="Ingrese el nombre, apellido o email que desea buscar">
                                     </div>
                                 </div>
-                                <?php #print_r($_SESSION['vistas']) 
+                                <?php # print_r($_POST);
                                 ?>
                             </div>
                         </div>
                         <div class="card-body px-0 pb-2">
-                            <div class="table-responsive" id="resultadobusqueda" name="resultadobusqueda">
-
-                            </div>
+                            <div class="table-responsive" id="resultadobusqueda" name="resultadobusqueda"></div>
+                            <div id="modalResultado" name="modalResultado"></div>
                             <div class="table-responsive">
                                 <table class="table align-items-center mb-0" id="tablaClientes">
                                     <thead>
@@ -153,8 +153,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
                                                         </form>
                                                     </div>
                                                 </td>
-
-                                                <div class="modal fade" id="staticBackdrop<?php echo $cliente['id_usuario']; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal fade" id="staticBackdrop<?php echo $cliente['id_usuario'];; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -169,7 +168,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                                                 <form action="" method="post">
-                                                                    <input type="hidden" name="id" id="idCliente" value="<?php echo $cliente['id_usuario']; ?>">
+                                                                    <input type="hidden" name="id" value="<?php echo $cliente['id_usuario'];; ?>">
                                                                     <button name="accion" value="eliminarCliente" type="submit" class="btn btn-danger">Aceptar</button>
                                                                 </form>
                                                             </div>
@@ -183,6 +182,28 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
                                         ?>
                                     </tbody>
                                 </table>
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalEliminarCliente" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalEliminarClienteLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalEliminarClienteLabel">Eliminar Cliente</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>¿Estás seguro de que deseas eliminar este cliente?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <form id="formEliminarCliente" action="" method="post">
+                                                    <input type="hidden" id="idClienteEliminar" name="id">
+                                                    <button name="accion" value="eliminarCliente" type="submit" class="btn btn-danger">Aceptar</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -273,36 +294,18 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
                     $controller->editar($_POST['idCliente']);
                     break;
                 case 'eliminarCliente':
-                    $c = $controller->eliminarCliente($_POST['id']);
-                    if ($c == true) {
-                        echo "<script>  Swal.fire({
-                                icon: 'success',
-                                title: 'Genial!😍',
-                                text: 'Cliente eliminado exitosamente!',
-                                 })   </script>";
-                        echo '<script type="text/javascript">
-                                 setTimeout(function() {
-                                 location.href = "clientes.php"; 
-                                 }, 1000);                     
-                             </script> 
-                                 ';
-                    } else {
-                        echo "<script>  Swal.fire({
-                                icon: 'error',
-                                title: 'Algo anda mal😢!',
-                                text: 'No se pudo eliminara el cliente, por favor intentalo nuevamente!',
-                                 })   </script>";
-                    }
-                    break;
+                 $controller->eliminarCliente($_POST['id']);
             }
         }
-        require_once(dirname(__DIR__).'/admin/layout/footer.php');
+        require_once(dirname(__DIR__) . '/admin/layout/footer.php');
     } else {
         header("location:../../index.php");
     } ?>
 
         <script>
+          
             $(buscarClientes());
+           // $(buscarIdCliente());
 
             function buscarClientes(cliente) {
 
@@ -315,7 +318,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
                         cliente: cliente
                     },
                     success: function(resultado) {
-                     
+
                         $("#resultadobusqueda").html(resultado);
 
                     }
@@ -324,14 +327,35 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
                 })
             }
 
+            function buscarIdCliente(cliente) {
+                $.ajax({
+                    url: 'buscarIdCliente.php',
+                    type: 'POST',
+                    dataType: 'html',
+                    data: {
+                        cliente: cliente
+                    },
+                    success: function(resultado) {
+                        // Establece el ID del cliente en el campo oculto del formulario en el modal
+                        $("#idClienteEliminar").val(resultado);
+                        // Abre el modal
+                        $("#modalEliminarCliente").modal('show');
+                        $("#modalResultado").html(resultado);
+                    }
+                });
+            }
+
+
             $(document).on('keyup', '#busquedaCliente', function() {
                 var valorBusqueda = $(this).val();
                 if (valorBusqueda != "") {
                     $("#tablaClientes").hide();
                     buscarClientes(valorBusqueda);
+                   
                 } else {
                     $("#tablaClientes").show();
                     buscarClientes();
+                  
                 }
             })
         </script>
