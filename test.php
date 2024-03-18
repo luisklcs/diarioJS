@@ -1,89 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificación de carga de archivo</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
 
-<?php
+    <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <h2 style="color: #333333;">Nuevo archivo agregado</h2>
+        <p style="color: #666666;">Ya se encuentra disponible el archivo con la información judicial del día de hoy. Puedes acceder al sitio web para ver más detalles.</p>
+        
+        <!-- Botón para dirigir al sitio web -->
+        <a href="https://www.ejemplo.com" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">Ir al sitio web</a>
+    </div>
 
-define("SERVIDOR", "localhost");
-define("USUARIO", "root");
-define("PASSWORD", "");
-define("BD", "u904935864_ddjus1nc13j0");
-
-$servidor = "mysql:host=" . SERVIDOR . ";dbname=" . BD;
-try {
-    $conexion = new PDO(
-        $servidor,
-        USUARIO,
-        PASSWORD,
-        array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
-    );
-    #echo "<script>alert('Conectado...')</script>" ;
-
-} catch (PDOException $e) {
-    // echo "<script>alert('Error...')</script>" ;
-}
-
-
-
-
-
-
-
-
-# >--------- MIGRAR USUARIOS A LA NUEBA BD ----------------->
-
-$query = "SELECT * FROM `usuarios`";
-$docs = $conexion->prepare($query);
-$docs->execute();
-
-$data = $docs->fetchAll(PDO::FETCH_ASSOC);
-
-echo "<pre>";
-
-foreach ($data as $key => $Usuario) {
-    #  print_r($Usuario);
-
-    $fecha_registro = $Usuario['fecha_registro'];
-   
-    // Obtener el año actual
-    $anio_actual = date('Y');
-
-    // Obtener el mes actual
-    $mes_actual = date('m');
-    $mes_siguiente = date('m', strtotime('+1 month', mktime(0, 0, 0, $mes_actual, 1)));
-
-    $dia_actual = date('d');
- 
-
-    $mes_registro = date('m', strtotime($fecha_registro));
-    $dia_registro = date('d', strtotime($fecha_registro));
-
-    if ($mes_registro > $mes_actual) {
-
-        if ($dia_actual > $dia_registro) {
-            $fecha_cobro = $anio_actual . '-' . $mes_siguiente . '-' . $dia_registro;
-        } else {
-            $fecha_cobro = $anio_actual . '-' . $mes_actual . '-' . $dia_registro;
-        }
-       
-
-    } elseif ($mes_registro < $mes_actual) {
-
-        echo "<pre>";
-        if ($dia_actual > $dia_registro) {
-            $fecha_cobro = $anio_actual . '-' . $mes_siguiente . '-' . $dia_registro;
-        } else {
-            $fecha_cobro = $anio_actual . '-' . $mes_actual . '-' . $dia_registro;
-        }
-       
-    } elseif ($mes_registro = $mes_actual) {
-        if ($dia_actual > $dia_registro) {
-            $fecha_cobro = $anio_actual . '-' . $mes_siguiente . '-' . $dia_registro;
-        } else {
-            $fecha_cobro = $anio_actual . '-' . $mes_actual . '-' . $dia_registro;
-        }
-      
-    }
-    /*  print_r("fecha de cobro: " . $fecha_cobro);
-    print_r("mes de registro: " . $mes);
-    print_r("dia de registro: " . $dia); */
-}
-
-?>
+</body>
+</html>

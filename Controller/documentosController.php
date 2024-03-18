@@ -49,6 +49,14 @@ class DocumentosController
     echo "<script> location.href = '../visualizer/web/viewer.php?file=" . $data['pdf'] . "'; </script> ";
   }
 
+  public function verDocImpresion($id)
+  {
+    $data = $this->objDocumento->visualizarDocumentoCliente($id);
+
+    $_SESSION['documento'] = $data;
+    $_SESSION['visitado'] = true;
+    echo "<script> location.href = '../visualizer/web/viewerPdf.php?file=" . $data['pdf'] . "'; </script> ";
+  }
 
   public function borrarDocumento($id)
   {
@@ -56,6 +64,7 @@ class DocumentosController
   }
   public function CargarDocumento()
   {
+
 
     if (isset($_FILES['documento'])) {
 
@@ -93,5 +102,23 @@ class DocumentosController
   public function vistasDocumento($idDoc)
   {
     return $this->objDocumento->vistasDocumento($idDoc);
+  }
+
+  public function enviarmail()
+  {
+
+    require_once(dirname(__DIR__) . '/mail/enviar.php');
+    require_once(dirname(__DIR__) . '/Model/clientesModel.php');
+    $clientes = new Clientes();
+    $listaEmails = $clientes->listaEmails();
+    $mail = new enviarMail();
+    $enviados = 0;
+
+    foreach ($listaEmails as $key => $email) {
+      if ($mail->enviar($email['correo'], $email['nombreUsuario']) == true) {
+        $enviados++;
+      }
+    }
+    return $this->alerta->mostrarAlerta('success', 'Usuarios notificados', 'Se notificaron ' . $enviados . ' clientes!');
   }
 }

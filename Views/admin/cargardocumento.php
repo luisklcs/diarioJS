@@ -1,10 +1,10 @@
 <script type="text/javascript">
-  setTimeout(function() {
-    if (window.history.replaceState) {
-      console.log("prueba");
-      window.history.replaceState(null, null, window.location.href);
-    }
-  }, 1500);
+    setTimeout(function() {
+        if (window.history.replaceState) {
+            console.log("prueba");
+            window.history.replaceState(null, null, window.location.href);
+        }
+    }, 1500);
 </script>
 <?php
 
@@ -14,6 +14,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
 
     require_once(dirname(dirname(__DIR__)) . '/Controller/documentosController.php');
     $controller = new documentosController();
+    $controller->tituloPagina = "Cargar documentos";
 
     date_default_timezone_set('America/Bogota');
     $fecha = date("Y-m-d");
@@ -61,15 +62,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
     <body class="g-sidenav-show  bg-gray-100">
         <?php $opc = "agregardocumento";
         $asd->aside($opc);
-
-        require_once(dirname(__DIR__).'/admin/layout/header.php');
-
-        if (isset($_POST['accion']) && $_POST['accion'] == 'subir') {
-            # echo "<script> alert('subie...')</script>";
-            $controller->CargarDocumento();
-        }
-
-
+        require_once(dirname(__DIR__) . '/admin/layout/header.php');
         ?>
 
 
@@ -82,7 +75,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
                             <div class="row">
                                 <div class="col-lg-12 col-7">
                                     <h3 class="text-uppercase">Cargar Documento</h3>
-                                    <p><?php #print_r($_POST)
+                                    <p><?php # print_r($_POST)
                                         ?></p>
                                 </div>
                             </div>
@@ -102,7 +95,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
 
                                 <div class="col-md-5">
                                     <label for="input" class="form-label">Seleccionar archivo</label>
-                                    <input type="file" class="form-control" name="documento" required>
+                                    <input type="file" class="form-control" name="documento">
                                 </div>
 
 
@@ -111,28 +104,34 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
 
                                     <div class="col">
                                         <button name="accion" value="subir" type="submit" class="btn btn-success" style="width: 180px;">Guardar</button>
-
-                                        <button name="accion" value="vertodos" type="submit" class="btn btn-info" onclick="alumnos()">Ver archivos</button>
-                                    </div>
-
-                                    <script type="text/javascript">
-                                        function alumnos() {
-                                            setTimeout(function() {
-                                                location.href = "documentos.php";
-                                            }, 0);
-                                        }
-                                    </script>
-                                </div>
-
+                                        <button name="accion" value="vertodos" type="submit" class="btn btn-info" onclick="documentos()">Ver archivos</button>
                             </form>
 
 
-
-
                         </div>
+                        <div class="col-5">
+
+
+                            <button name="accion" value="notificar" type="submit" class="btn btn-warning" ">Notificar usuarios</button>
+                                </div>
+                                
+                                <script>
+                                function documentos(){
+                                setTimeout(function(){
+                                location.href = "documentos.php";
+                                }, 0);
+                                }
+                                </script>
+                        </div>
+
+
+
+
+
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         </div>
         </div>
@@ -146,7 +145,13 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
     <?php
 
 
-    require_once(dirname(__DIR__).'/admin/layout/footer.php');
+    if (isset($_POST['accion']) && $_POST['accion'] == 'subir') {
+        $controller->CargarDocumento();
+    } elseif (isset($_POST['accion']) && $_POST['accion'] == 'notificar') {
+        $controller->enviarmail();
+    }
+
+    require_once(dirname(__DIR__) . '/admin/layout/footer.php');
 } else {
     header("location:../../index.php");
 } ?>

@@ -1,4 +1,5 @@
 <?php
+ date_default_timezone_set('America/Bogota');
 class DashModel
 {
 
@@ -113,7 +114,9 @@ class DashModel
     {
 
         #CLIENTES CON VISTAS PERSONALIZADAS
-        $query = "SELECT Us.`id_usuario`, Us.`nombreUsuario`, Us.`apellidos`, Us.`identificacion`, Us.`correo`, Vi.`vistas_asignadas` FROM `usuarios` Us INNER JOIN config_vistas_usuario Vi ON Vi.`id_usuario` = Us.`id_usuario` WHERE Us.`rol` = 2 AND vi.personalizadas = 1 AND Us.`estadoCuenta` = 1;";
+        $query = "SELECT usuarios.id_usuario, usuarios.nombreUsuario, usuarios.apellidos, usuarios.identificacion, usuarios.correo, config_vistas_usuario.vistas_asignadas 
+        FROM usuarios INNER JOIN config_vistas_usuario ON config_vistas_usuario.id_usuario = usuarios.id_usuario 
+        WHERE usuarios.rol = 2 AND config_vistas_usuario.personalizadas = 1 AND usuarios.estadoCuenta = 1;";
         $listar = $this->PDO->prepare($query);
         $listar->execute();
         return $listar;

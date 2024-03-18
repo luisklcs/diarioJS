@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__DIR__).'/Model/clientesModel.php');
+require_once(dirname(__DIR__) . '/Model/clientesModel.php');
 require_once(dirname(__DIR__) . '/assets/alerts.php');
 
 class clientesController
@@ -33,8 +33,14 @@ class clientesController
   public function registrar($data)
   {
     $this->vista = "clientes";
-    $this->tituloPagina = "Lista de clientes";
-    return $this->objCliente->registrar($data);
+    $this->tituloPagina = "Lista de clientes";  
+    if ($this->objCliente->registrar($data) == true) {
+      return $this->alerta->mostrarAlerta('success', 'Genial!😍', 'Cliente registrado exitosamente!');
+    } else {
+      return $this->alerta->mostrarAlerta('error', 'Algo anda mal😢', 'No se pudo registrar el cliente, por favor intentalo nuevamente!');
+    }
+    
+   
   }
 
   public function editar($idCliente)

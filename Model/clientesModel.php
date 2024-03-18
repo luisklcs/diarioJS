@@ -1,5 +1,5 @@
 <?php
-
+ date_default_timezone_set('America/Bogota');
 class Clientes
 {
   private $PDO;
@@ -346,7 +346,12 @@ class Clientes
     return $data->fetch(PDO::FETCH_ASSOC);
   }
 
-
+public function listaEmails(){
+  $query = "SELECT `nombreUsuario`,`correo` FROM `usuarios` WHERE `estadoCuenta` = 1 AND `rol` = 2;";
+  $lista = $this->PDO->prepare($query);
+  $lista->execute();
+  return $lista->fetchAll(PDO::FETCH_ASSOC);
+}
   #LIMPIAR DATOS LIMPIAR DATOS LIMPIAR DATOS LIMPIAR DATOS LIMPIAR DATOS
   public function limpiarDatosPost($datosAlimpiar)
   {

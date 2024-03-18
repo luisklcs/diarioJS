@@ -6,15 +6,15 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
     $alerta = new Alertas();
 
     $controller = new DocumentosController();
-
-    $cantidadDocumentos = $controller->contar();
+$fecha = "2023-02-13";
+    $cantidadDocumentos = $controller->contar($fecha);
 
     $pagActual = isset($_GET['pag']) ? $_GET['pag'] : 1;
     $limite = 10;
     $inicio = ($pagActual - 1) * $limite;
     $total_paginas = ceil($cantidadDocumentos / $limite);
 
-    $lista = $controller->listar($inicio, $limite);
+    $lista = $controller->listar($inicio, $limite, $fecha);
 
     include 'aside.php';
     $asd = new Aside();

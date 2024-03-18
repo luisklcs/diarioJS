@@ -25,6 +25,17 @@ final class statusController {
        return $FechaRegistro->fetchColumn();
 
     }
+
+    public function impresionStatus($id){
+        $conexion = new db();
+        $pdo = $conexion->conexion();
+        
+        $query = "SELECT `impresion` FROM `permisos` WHERE `id_usuario` = :idUser";
+        $impresion = $pdo->prepare($query);
+        $impresion->bindparam(':idUser', $id, PDO::PARAM_INT);
+        $impresion->execute();
+       return $impresion->fetchColumn();
+    }
     
 }
 

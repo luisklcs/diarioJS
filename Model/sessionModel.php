@@ -35,4 +35,21 @@ class loginModel
         return false;
         exit;
     }
+
+    public function actualizarPass($actual, $nueva, $id)
+    {
+        $query = "SELECT `passwords` FROM `usuarios` WHERE `id_usuario` = :idUser";
+        $pass = $this->PDO->prepare($query);
+        $pass->bindParam(':idUser', $id, PDO::PARAM_INT);
+        $pass->execute();
+        $pass = $pass->fetchColumn();
+        if (password_verify($actual, $pass)) {
+            $nueva = password_hash($nueva, PASSWORD_DEFAULT);
+            $query = "UPDATE `usuarios` SET `passwords` = :newPass WHERE `usuarios`.`id_usuario` = :idUser";
+            $update = $this->PDO->prepare($query);
+            $update->bindParam(':newPass', $nueva, PDO::PARAM_STR,255);
+            $update->bindParam(':idUser', $id, PDO::PARAM_INT);
+            return ($update->execute()) ? true : false;
+        }
+    }
 }

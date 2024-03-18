@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-	<title>Iniciar sesión | Estados judiciales</title>
+	<title>Iniciar sesión | Estados judiciales Sincelejo</title>
 	<meta charset="UTF-8">
 	<link rel="icon" type="image/png" href="views/assets/img/icon.png">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,7 +19,7 @@
 				<div class="login100-form-title" style="background-image: url(assets/images/bg-01.jpg);">
 					<span class="login100-form-title-1">
 						Iniciar sesión
-						<p class="login100-form-title-2">Notificaciones judiciales</p>
+						<p class="login100-form-title-2">Estados judiciales Sincelejo</p>
 					</span>
 				</div>
 

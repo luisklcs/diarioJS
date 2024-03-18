@@ -7,16 +7,17 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 2) {
     if ($status == 1) {
 
         $fechaRegistro = $statusController->myFechaDeRegistro($_SESSION['user']['id_usuario']);
+        $impresion = $statusController->impresionStatus($_SESSION['user']['id_usuario']);
 
-
+        
         include 'aside_cliente.php';
         $asd = new Aside();
 
-        require_once(dirname(__DIR__).'/Controller/documentosController.php');
+        require_once(dirname(__DIR__) . '/Controller/documentosController.php');
 
         $controller = new DocumentosController();
         $cantidadDocumentos = $controller->contar($fechaRegistro);
-       
+
         $pagActual = isset($_GET['pag']) ? $_GET['pag'] : 1;
         $limite = 10;
         $inicio = ($pagActual - 1) * $limite;
@@ -25,7 +26,18 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 2) {
         $lista = $controller->listar($inicio, $limite, $fechaRegistro);
 
         #
-        if ($_POST) {
+        if (isset($_POST['accion']) && $_POST['accion']=='ver') {
+            $id = $_POST['id'];
+            if ($impresion == 1) {
+            $controller->verDocImpresion($id);
+            }else{
+                $controller->verDocCliente($id);
+            }
+       
+       
+        }
+
+     /*    if ($_POST) {
             $id = $_POST['id'];
             $accion = $_POST['accion'];
 
@@ -35,7 +47,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 2) {
                     $controller->verDocCliente($id);
                     break;
             }
-        }
+        } */
 
 
 ?>
@@ -87,6 +99,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 2) {
                                             <?php
                                             $n = 1;
                                             while ($documento = $lista['docs']->fetch(PDO::FETCH_ASSOC)) {
+
 
                                                 $vistas = $controller->vistasDocumento($documento['id_documento']);
                                                 /*   echo "<pre>";
@@ -227,8 +240,9 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 2) {
 
         <?php
         require_once(dirname(__DIR__) . '/Views/global/footer.php');
-    }else{
-    echo '<script type="text/javascript"> location.href = "/Views/admin/cerrarSesion.php";  </script> ';}
+    } else {
+        echo '<script type="text/javascript"> location.href = "/Views/admin/cerrarSesion.php";  </script> ';
+    }
 } else {
     header("location:../../index.php");
 } ?>

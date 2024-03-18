@@ -1,4 +1,5 @@
 <?php
+
 class Alertas {
     public function mostrarAlerta($icono, $titulo, $mensaje) {
         echo "

@@ -163,20 +163,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
         </script>
     <?php
     if (isset($_POST['accion']) && $_POST['accion'] == "registrarCliente") {
-        $c = $controller->registrar($_POST);
-        if ($c == true) {
-            echo "<script>  Swal.fire({
-                    icon: 'success',
-                    title: 'Genial!😍',
-                    text: 'Usuario registrado exitosamente!',
-                     })   </script>";
-        } else {
-            echo "<script>  Swal.fire({
-                    icon: 'error',
-                    title: 'Algo anda mal😢!',
-                    text: 'No se pudo registrar el usuario, por favor intentalo nuevamente!',
-                     })   </script>";
-        }
+       $controller->registrar($_POST);      
     };
     require_once(dirname(__DIR__).'/admin/layout/footer.php');
 } else {
