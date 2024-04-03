@@ -6,6 +6,7 @@
         }
     }, 1500);
 </script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <?php
 
 require_once(dirname(dirname(__DIR__)) . '/Views/admin/layout/links.php');
@@ -54,6 +55,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
 
     include 'aside.php';
     $asd = new Aside();
+    
 ?>
 
     <link rel="icon" href="../assets/img/icon.png" type="image/png">
@@ -110,18 +112,14 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
 
                         </div>
                         <div class="col-5">
-
-
                             <button name="accion" value="notificar" type="submit" class="btn btn-warning" ">Notificar usuarios</button>
-                                </div>
+                         </div>
                                 
                                 <script>
                                 function documentos(){
                                 setTimeout(function(){
-                                location.href = "documentos.php";
-                                }, 0);
-                                }
-                                </script>
+                                location.href = " documentos.php"; }, 0); } </script>
+
                         </div>
 
 
@@ -129,29 +127,63 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1) {
 
 
                     </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Notificando usuarios</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Usuarios notificados: <span id="contador">0</span> de  <span id="total"></span></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        </div>
-        </div>
-        </div>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+            <!--  FIN LISTA DE CLIENTES FIN LISTA DE CLIENTES FIN LISTA DE CLIENTES FIN LISTA DE CLIENTES -->
 
 
-        <!--  FIN LISTA DE CLIENTES FIN LISTA DE CLIENTES FIN LISTA DE CLIENTES FIN LISTA DE CLIENTES -->
-
-        </div>
-        </div>
-
-    <?php
+        <?php
 
 
-    if (isset($_POST['accion']) && $_POST['accion'] == 'subir') {
-        $controller->CargarDocumento();
-    } elseif (isset($_POST['accion']) && $_POST['accion'] == 'notificar') {
-        $controller->enviarmail();
-    }
+        if (isset($_POST['accion']) && $_POST['accion'] == 'subir') {
+            $controller->CargarDocumento();
+        } elseif (isset($_POST['accion']) && $_POST['accion'] == 'notificar') {
+            echo "<script> var miModal = new bootstrap.Modal(document.getElementById('miModal'));
+            miModal.show(); </script>";
+            require_once(dirname(dirname(__DIR__)) . '/mail/enviar.php');
+            require_once(dirname(dirname(__DIR__)) . '/Model/clientesModel.php');
+            $clientes = new Clientes();
+            $listaEmails = $clientes->listaEmails();
+            $total = $listaEmails->rowCount();
+            $mail = new enviarMail();
+           $listaEmails = $listaEmails->fetchAll(PDO::FETCH_ASSOC);
+            $mail = new enviarMail();
 
-    require_once(dirname(__DIR__) . '/admin/layout/footer.php');
-} else {
-    header("location:../../index.php");
-} ?>
+         
+
+            echo "<script>document.getElementById('total').innerText = $total ;</script>";
+             foreach ($listaEmails as $key => $email) {
+                if ($mail->enviar($email['correo'], $email['nombreUsuario'])) {                    
+                    echo "<script>document.getElementById('contador').innerText = $key+1 ;</script>";
+                    flush(); // Vacía el búfer de salida
+                    ob_flush(); // Envia el búfer de salida
+                    usleep(100000); // Pausa de 0.1 segundos (100000 microsegundos) entre envíos de correo
+        
+                } 
+            }
+        }
+
+        require_once(dirname(__DIR__) . '/admin/layout/footer.php');
+    } else {
+        header("location:../../index.php");
+    } ?>

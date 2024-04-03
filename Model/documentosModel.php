@@ -1,5 +1,5 @@
 <?php
- date_default_timezone_set('America/Bogota');
+date_default_timezone_set('America/Bogota');
 class ModelDocumentos
 {
 
@@ -7,7 +7,7 @@ class ModelDocumentos
 
   public function __construct()
   {
-    require_once(dirname(__DIR__).'/Config/conexion.php');
+    require_once(dirname(__DIR__) . '/Config/conexion.php');
     require_once(dirname(__DIR__) . '/Controller/limpiar.php');
     $con = new db();
     $this->PDO = $con->conexion();
@@ -15,20 +15,20 @@ class ModelDocumentos
 
   public function contarDocumentos($fechaRegistro)
   {
-    $query = "SELECT COUNT(*) FROM `documentos` WHERE `fecha` >= '".$fechaRegistro."'";
+    $query = "SELECT COUNT(*) FROM `documentos` WHERE `fecha` >= '" . $fechaRegistro . "'";
     $stmt = $this->PDO->prepare($query);
     $stmt->execute();
     $numeroDocumentos = $stmt->fetchColumn();
     return $numeroDocumentos;
   }
 
-  public function listarDocumentos($i, $l , $fecha)
+  public function listarDocumentos($i, $l, $fecha)
   {
 
     $inicio = limpiarDato($i);
     $limite = limpiarDato($l);
 
-    $query = 'SELECT * FROM `documentos` WHERE `fecha` >= '.$fecha.' ORDER BY `fecha` DESC  LIMIT ' . $inicio . ',' . $limite . '';
+    $query = 'SELECT * FROM `documentos` WHERE `fecha` >= ' . $fecha . ' ORDER BY `fecha` DESC  LIMIT ' . $inicio . ',' . $limite . '';
     $listar = $this->PDO->prepare($query);
     $listar->execute();
     $documentos['docs'] = $listar;
@@ -184,6 +184,17 @@ class ModelDocumentos
     $data['asignadas'] = $asignadas;
     $data['TotalUsadas'] = $vistasUsadas;
     return $data;
+  }
 
+  public function documentoVistoPorUsuarios($idDoc)
+  {
+    $query = "SELECT doc.nombre, doc.fecha, vi.total_vistas_usadas, vi.vistas_usadas_hoy, us.nombreUsuario, 
+    us.apellidos, vi.fecha_primera_vista, vi.fecha_ultima_vista FROM documentos doc 
+    INNER JOIN vistas vi ON doc.id_documento = vi.id_documento INNER JOIN usuarios us 
+    ON vi.id_usuario = us.id_usuario WHERE doc.id_documento = " . $idDoc;
+    $data = $this->PDO->prepare($query);
+    $data->execute();
+    # $data = $data->fetchAll(PDO::FETCH_ASSOC);
+    return  $data;
   }
 }

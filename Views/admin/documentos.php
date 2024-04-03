@@ -66,27 +66,13 @@ $fecha = "2023-02-13";
                                     break;
 
                                 case 'eliminarDocumento':
-                                    $a =  $controller->borrarDocumento($id);
-
-                                    if ($a == 1) {
-                                        $alerta->mostrarAlerta('success', 'Eliminado!', 'Documento eliminado correctamente!!');
-                                        echo '<script type="text/javascript">
-                                          setTimeout(function() {
-                                              location.reload();
-                                              }, 1500);
-                                              </script>';
-                                        $a = null;
-                                    }
-                                    if ($a = 0) {
-                                        $alerta->mostrarAlerta('Error', 'Error al eliminar!', 'No se pudo eliminar el documento!');
-                                        echo '<script type="text/javascript">
-                                        setTimeout(function() {
-                                            location.reload();
-                                            }, 1500);
-                                            </script>';
-                                        $a = null;
-                                    }
+                                   $controller->borrarDocumento($id);
                                     break;
+                                    case 'vistasDocumento':
+                                        $_SESSION['id'] = $id;
+                                        echo "<script> location.href = 'vistasdocumento.php'; </script> ";
+                                       
+                                        break;
                             }
                         }
 
@@ -138,7 +124,7 @@ $fecha = "2023-02-13";
                                                             <input type="hidden" name="id" value="<?php echo $documento['id_documento']; ?>">
                                                             <div class="text-uppercase align-middle text-center ">
                                                                 <button style="border:none" class="badge badge-sm bg-gradient-info" type="submit" name="accion" value="verDocumento"><i class="fa-solid fa-eye"></i></button>
-                                                                <button style="border:none" class="badge badge-sm bg-gradient-success" type="submit" name="accion" value="verDocumento"><i class="fa-solid fa-list-check"></i></button>
+                                                                <button style="border:none" class="badge badge-sm bg-gradient-success" type="submit" name="accion" value="vistasDocumento"><i class="fa-solid fa-list-check"></i></button>
                                                                 <button style="border:none" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?php echo $documento['id_documento']; ?>" class="badge badge-sm bg-gradient-danger" type="button"><i class="fa-solid fa-trash-can"></i> </button>
                                                             </div>
 

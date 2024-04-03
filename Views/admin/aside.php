@@ -17,8 +17,8 @@ class Aside
             case 'documentos':
                 $verD = "active";
                 break;
-            case 'agp':
-                $agp = "active";
+            case 'passcliente':
+                $passcliente = "active";
                 break;
             case 'verp':
                 $verp = "active";
@@ -32,8 +32,8 @@ class Aside
             case 'agregardocumento':
                 $agD = "active";
                 break;
-            case 'notificar':
-                $noti = "active";
+            case 'updpass':
+                $updpass = "active";
                 break;
          
         
@@ -83,6 +83,14 @@ class Aside
                             <span class="nav-link-text ms-1">Registrar cliente</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?php echo $passcliente ;?>" href="updatepasswordcliente.php">
+                        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                                <img src="../assets/icons/key-solid.svg" alt="">
+                            </div>
+                            <span class="nav-link-text ms-1">Contraseña del cliente</span>
+                        </a>
+                    </li>
                     <li class="nav-item mt-3">
                         <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Documentos</h6>
                     </li>
@@ -110,9 +118,9 @@ class Aside
                         <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Notificaciones</h6>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php #echo $noti?> " href="passwordupdate.php">
+                        <a class="nav-link <?php echo $updpass; ?> " href="passwordupdate.php">
                             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                                <img src="../assets/icons/bell-solid.svg" alt="">
+                                <img src="../assets/icons/key-solid.svg" alt="">
                             </div>
                             <span class="nav-link-text ms-1">Cambiar contraseña</span>
                         </a>

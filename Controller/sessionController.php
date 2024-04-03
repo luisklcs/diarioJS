@@ -56,4 +56,18 @@ class sessionController
         } 
 
     }
+    public function actualizarPassCliente( $nueva, $id) {
+        require_once(dirname(__DIR__).'/Model/sessionModel.php');
+         require_once(dirname(__DIR__) . '/assets/alerts.php');
+        $usr = new loginModel();
+        $alertas = new Alertas();
+     
+     
+        if ( $usr->actualizarPassCliente($nueva, $id) == true) {
+            $alertas->mostrarAlerta('success', 'Contraseña actualizada!', 'Su contraseña se ha cambiado corretamente');
+        }else{
+            $alertas->mostrarAlerta('warning', 'Error!', 'No se pudo cambiar su contraseña');
+        } 
+
+    }
 }

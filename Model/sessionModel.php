@@ -52,4 +52,17 @@ class loginModel
             return ($update->execute()) ? true : false;
         }
     }
+    public function actualizarPassCliente($nueva, $id)
+    {
+       
+            $nueva = password_hash($nueva, PASSWORD_DEFAULT);
+            $query = "UPDATE `usuarios` SET `passwords` = :newPass WHERE `usuarios`.`id_usuario` = :idUser";
+            $update = $this->PDO->prepare($query);
+            $update->bindParam(':newPass', $nueva, PDO::PARAM_STR,255);
+            $update->bindParam(':idUser', $id, PDO::PARAM_INT);
+           return ($update->execute()) ? true : false;
+        
+    }
+
+
 }

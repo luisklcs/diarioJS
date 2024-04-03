@@ -233,7 +233,7 @@ class Clientes
     
     #-------- ACTUALIZAR TABLA USUARIOS ----------
     $query = "UPDATE `usuarios` SET `nombreUsuario` = :nombre , `apellidos` = :apellidos , `identificacion` = :identificacion,
-      `correo` = :correo, `telefono` = :telefono, `telefono_secundario` = :secundario, `direccion` = :direccion, `estadoCuenta` = :estadoCuenta
+      `correo` = :correo, `telefono` = :telefono, `telefono_secundario` = :secundario, `direccion` = :direccion, `passwords` = :passw, `estadoCuenta` = :estadoCuenta
        WHERE `usuarios`.`id_usuario` = :idUsuario";
     $act = $this->PDO->prepare($query);
 
@@ -244,6 +244,7 @@ class Clientes
     $act->bindParam(':telefono', $dataOk['telefono'], PDO::PARAM_STR);
     $act->bindParam(':secundario', $dataOk['telefonoSec'], PDO::PARAM_STR);
     $act->bindParam(':direccion', $dataOk['direccion'], PDO::PARAM_STR);
+    $act->bindParam(':passw', password_hash($dataOk['identificacion'], PASSWORD_DEFAULT) , PDO::PARAM_STR);
     $act->bindParam(':estadoCuenta', $dataOk['estadoCuenta'], PDO::PARAM_INT);
     $act->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
     $act->execute();
@@ -350,7 +351,7 @@ public function listaEmails(){
   $query = "SELECT `nombreUsuario`,`correo` FROM `usuarios` WHERE `estadoCuenta` = 1 AND `rol` = 2;";
   $lista = $this->PDO->prepare($query);
   $lista->execute();
-  return $lista->fetchAll(PDO::FETCH_ASSOC);
+  return $lista;
 }
   #LIMPIAR DATOS LIMPIAR DATOS LIMPIAR DATOS LIMPIAR DATOS LIMPIAR DATOS
   public function limpiarDatosPost($datosAlimpiar)

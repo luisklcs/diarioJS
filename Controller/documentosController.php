@@ -60,7 +60,12 @@ class DocumentosController
 
   public function borrarDocumento($id)
   {
-    return ($this->objDocumento->borrarDocumento($id) == true) ? 1 : 0;
+    $d = $this->objDocumento->borrarDocumento($id);
+    if ($d == true) {
+      return $this->alerta->mostrarAlerta('success', 'Documento eliminado!', 'El documento se ha eliminado correctamente!');
+    } else {
+      return $this->alerta->mostrarAlerta('error', 'Error!', 'Ocurrió un error al eliminar el documento, por favor intente nuevamente!');
+    }
   }
   public function CargarDocumento()
   {
@@ -92,7 +97,7 @@ class DocumentosController
           if ($d == true) {
             return $this->alerta->mostrarAlerta('success', 'Documento guardado!', 'El documento se ha cargado correctamente!');
           } else {
-            return $this->alerta->mostrarAlerta('error', 'Error!', 'EOcurrió un error al cargar el documento, por favor intente nuevamente!');
+            return $this->alerta->mostrarAlerta('error', 'Error!', 'Ocurrió un error al cargar el documento, por favor intente nuevamente!');
           }
         }
       }
@@ -120,5 +125,8 @@ class DocumentosController
       }
     }
     return $this->alerta->mostrarAlerta('success', 'Usuarios notificados', 'Se notificaron ' . $enviados . ' clientes!');
+  }
+  public function documentoVisualizado($id)  {
+    return $this->objDocumento->documentoVistoPorUsuarios($id);
   }
 }

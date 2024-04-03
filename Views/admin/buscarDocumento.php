@@ -59,7 +59,7 @@ if ($_POST) {
                                                             <input type="hidden" name="id" value="'.$documento['id_documento'].'">
                                                             <div class="text-uppercase align-middle text-center ">
                                                                 <button style="border:none" class="badge badge-sm bg-gradient-info" type="submit" name="accion" value="verDocumento"><i class="fa-solid fa-eye"></i></button>
-                                                                <button style="border:none" class="badge badge-sm bg-gradient-success" type="submit" name="accion" value="verDocumento"><i class="fa-solid fa-list-check"></i></button>
+                                                                <button style="border:none" class="badge badge-sm bg-gradient-success" type="submit" name="accion" value="vistasDocumento"><i class="fa-solid fa-list-check"></i></button>
                                                                 <button style="border:none" data-bs-toggle="modal" data-bs-target="#staticBackdrop'.$documento['id_documento'].'" class="badge badge-sm bg-gradient-danger" type="button"><i class="fa-solid fa-trash-can"></i> </button>
                                                             </div>
 
