@@ -1,16 +1,19 @@
 <?php
-require_once(dirname(__DIR__).'/admin/layout/links.php');
+require_once(dirname(__DIR__) . '/admin/layout/links.php');
 
 if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
     require_once(dirname(dirname(__DIR__)) . '/Controller/clientesController.php');
 
 
-    $controller = new clientesController();
     include 'aside.php';
     $asd = new Aside();
+
+    $controller = new clientesController();
     $data['datos'] = $_SESSION['cliente']['datos'];
     $data['permisos'] = $_SESSION['cliente']['permisos'];
     $data['vistas'] = $_SESSION['cliente']['vistas'];
+    $data['desde'] = $_SESSION['cliente']['desde'];
+
 ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="icon" href="../assets/img/icon.png" type="image/png">
@@ -70,13 +73,17 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
                                     <input type="number" class="form-control" name="telefonoSec" value="<?php echo $data['datos']['telefono_secundario']; ?>">
                                 </div>
 
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <label for="input" class="form-label">Dirección</label>
                                     <input type="text" class="form-control" name="direccion" value="<?php echo $data['datos']['direccion']; ?>" required>
                                 </div>
+                                <div class="col-md-2">
+                                    <label for="input" class="form-label">Inicio de visualizaciones</label>
+                                    <input type="date" class="form-control" name="desde" value="<?php echo ($data['desde']); ?>" required>
+                                </div>
                                 <div class="col-md-1">
                                     <label for="input" class="form-label">Vistas asignadas</label>
-                                    <input type="text" class="form-control" name="asignadas" value="<?php print_r($data['vistas']); ?>" required>
+                                    <input type="number" class="form-control" name="asignadas" value="<?php print_r($data['vistas']); ?>" required>
                                 </div>
                                 <?php
                                 if ($data['datos']['estadoCuenta'] == 1) {
@@ -172,13 +179,13 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
                 </div>
             </div>
         </div>
-      
+
     <?php
-        require_once(dirname(__DIR__).'/admin/layout/footer.php');
+    require_once(dirname(__DIR__) . '/admin/layout/footer.php');
 
     if (isset($_POST['accion']) && $_POST['accion'] == "actualizarCliente") {
-        
-      $c = $controller->actualizar($_POST);
+
+        $c = $controller->actualizar($_POST);
 
         if ($c == 1) {
             unset($_SESSION['cliente']);
@@ -199,9 +206,8 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
                     title: 'Algo anda mal😢!',
                     text: 'No se pudo actualizar el usuario, por favor intentalo nuevamente!',
                      })   </script>";
-        }  
+        }
     };
-
 } else {
     header("location:../../index.php");
 }  ?></pre>

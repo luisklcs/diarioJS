@@ -103,12 +103,13 @@ class Clientes
       $fechaActual = date("Y-m-d");
       $fechaCobro = date("Y-m-d", strtotime($fechaActual . " +30 days"));
 
-      $query = "INSERT INTO `fechas` (`id_fechas`, `id_usuario`, `f_registro`, `f_cobro`, `f_suspencion`, `f_reactivacion`)
-      VALUES (NULL, :lastID, :actual, :cobro, NULL, NULL);";
+      $query = "INSERT INTO `fechas` (`id_fechas`, `id_usuario`, `f_registro`, `desde`,`f_cobro`, `f_suspencion`, `f_reactivacion`)
+      VALUES (NULL, :lastID, :actual, :desde, :cobro, NULL, NULL);";
       $insertarFechas = $this->PDO->prepare($query);
 
       $insertarFechas->bindParam(':lastID', $id, PDO::PARAM_INT);
       $insertarFechas->bindParam(':actual', $fechaActual, PDO::PARAM_STR);
+      $insertarFechas->bindParam(':desde', $data['desde'], PDO::PARAM_STR);
       $insertarFechas->bindParam(':cobro', $fechaCobro, PDO::PARAM_STR);
       $insertarFechas->execute();
 
@@ -146,28 +147,45 @@ class Clientes
 
   public function datosCliente($i)
   {
-    $m = new Clientes();
-    $id = $m->limpiarDato($i);
-    $query = "SELECT * FROM `usuarios` WHERE `id_usuario` = :idCliente;";
-    $data = $this->PDO->prepare($query);
-    $data->bindParam(':idCliente', $id, PDO::PARAM_INT);
-    $data->execute();
+    try {
+      $this->PDO->beginTransaction();
+      $m = new Clientes();
+      $id = $m->limpiarDato($i);
+      $query = "SELECT * FROM `usuarios` WHERE `id_usuario` = :idCliente;";
+      $data = $this->PDO->prepare($query);
+      $data->bindParam(':idCliente', $id, PDO::PARAM_INT);
+      $data->execute();
+  
+      $query = "SELECT * FROM `permisos` WHERE `id_usuario` = :idCliente;";
+      $permisos = $this->PDO->prepare($query);
+      $permisos->bindParam(':idCliente', $id, PDO::PARAM_INT);
+      $permisos->execute();
+  
+      $query = "SELECT `vistas_asignadas` FROM `config_vistas_usuario` WHERE `id_usuario` = :idCliente;";
+      $vistas = $this->PDO->prepare($query);
+      $vistas->bindParam(':idCliente', $id, PDO::PARAM_INT);
+      $vistas->execute();
+  
+      $query = "SELECT `desde` FROM `fechas` WHERE `id_usuario` = :idCliente";
+      $desde = $this->PDO->prepare($query);
+      $desde->bindParam(':idCliente', $id, PDO::PARAM_INT);
+      $desde->execute();
+  
+      $this->PDO->commit();
+  
+      $datos['datos'] = $data->fetch(PDO::FETCH_ASSOC);
+      $datos['permisos'] = $permisos->fetch(PDO::FETCH_ASSOC);
+      $datos['vistas'] = $vistas->fetchColumn();
+      $datos['desde'] = $desde->fetchColumn();
+  
+      return $datos;
 
-    $query = "SELECT * FROM `permisos` WHERE `id_usuario` = :idCliente;";
-    $permisos = $this->PDO->prepare($query);
-    $permisos->bindParam(':idCliente', $id, PDO::PARAM_INT);
-    $permisos->execute();
-
-    $query = "SELECT `vistas_asignadas` FROM `config_vistas_usuario` WHERE `id_usuario` = :idCliente;";
-    $vistas = $this->PDO->prepare($query);
-    $vistas->bindParam(':idCliente', $id, PDO::PARAM_INT);
-    $vistas->execute();
-
-
-    $datos['datos'] = $data->fetch(PDO::FETCH_ASSOC);
-    $datos['permisos'] = $permisos->fetch(PDO::FETCH_ASSOC);
-    $datos['vistas'] = $vistas->fetchColumn();
-    return $datos;
+    } catch (\Throwable $th) {
+     
+      $this->PDO->rollBack();
+      echo "Error: " . $th->getMessage();
+    }
+    
   }
 
   public function actualizar($data)
@@ -192,7 +210,7 @@ class Clientes
 
     $statusForm =  $dataOk['estadoCuenta'];
     
-   # print_r($dataOk);
+    print_r($dataOk);
     # <-------------------- CONSULTAR ESTADO DEL CLIENTE -------------------------------->
 
     $query = "SELECT `estadoCuenta` FROM `usuarios` WHERE `id_usuario` = ".$idUsuario;
@@ -214,7 +232,6 @@ class Clientes
       $estado['fechas'] = "ok"; 
      # echo "Suspender cuenta";
     }
-    
     # print_r($statusDB);
     
   } elseif ($statusDB == 0 && $statusForm == 1) {
@@ -230,6 +247,16 @@ class Clientes
  # echo "Activar cuenta";
   }
 
+    # <-------------------- ACTUALIZAR FECHAS DE INICIO DE VISUALIZACIONES -------------------------------->
+
+    $query = "UPDATE `fechas` SET `desde` = :desde WHERE `fechas`.`id_usuario` = :idUsuario";
+    $upFechas = $this->PDO->prepare($query);
+    $upFechas->bindParam(':desde', $dataOk['desde'], PDO::PARAM_STR);
+    $upFechas->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+    $upFechas->execute();
+    if ($upFechas->rowCount() > 0) {
+      $estado['fechas'] = "ok";
+    }
     
     #-------- ACTUALIZAR TABLA USUARIOS ----------
     $query = "UPDATE `usuarios` SET `nombreUsuario` = :nombre , `apellidos` = :apellidos , `identificacion` = :identificacion,
@@ -321,7 +348,7 @@ class Clientes
     $m = new Clientes();
     $id = $m->limpiarDato($i);
     $query = "SELECT doc.fecha AS nombre_doc, vs.id_vistas, vs.vistas_usadas_hoy, vs.total_vistas_usadas,
-    vs.fecha_primera_vista, vs.fecha_ultima_vista, cfvu.vistas_asignadas, us.nombreUsuario, us.apellidos
+    vs.fecha_primera_vista, vs.fecha_ultima_vista, vs.dispositivo, vs.navegador, vs.ip, vs.os, cfvu.vistas_asignadas, us.nombreUsuario, us.apellidos
     FROM vistas vs INNER JOIN documentos doc ON vs.id_documento = doc.id_documento
     INNER JOIN config_vistas_usuario cfvu ON cfvu.id_usuario = vs.id_usuario
     INNER JOIN usuarios us ON vs.id_usuario = us.id_usuario WHERE vs.id_usuario = $id ORDER BY doc.fecha DESC";

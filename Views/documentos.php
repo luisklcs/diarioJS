@@ -6,38 +6,44 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 2) {
     $status = $statusController->myStatus($_SESSION['user']['id_usuario']);
     if ($status == 1) {
 
-        $fechaRegistro = $statusController->myFechaDeRegistro($_SESSION['user']['id_usuario']);
+        $fechaInicioVistas = $statusController->myFechaDeVistas($_SESSION['user']['id_usuario']);
         $impresion = $statusController->impresionStatus($_SESSION['user']['id_usuario']);
 
-        
+
         include 'aside_cliente.php';
         $asd = new Aside();
 
         require_once(dirname(__DIR__) . '/Controller/documentosController.php');
 
         $controller = new DocumentosController();
-        $cantidadDocumentos = $controller->contar($fechaRegistro);
-
+        $cantidadDocumentos = $controller->contar($fechaInicioVistas);
+        if ($cantidadDocumentos == 0) {
+            echo "No hay documentos disponibles!";
+            exit();
+        }
+        if ($cantidadDocumentos <= 10) {
+            $limite = $cantidadDocumentos;
+        } else {
+            $limite = 10;
+        }
         $pagActual = isset($_GET['pag']) ? $_GET['pag'] : 1;
-        $limite = 10;
+
         $inicio = ($pagActual - 1) * $limite;
         $total_paginas = ceil($cantidadDocumentos / $limite);
 
-        $lista = $controller->listar($inicio, $limite, $fechaRegistro);
+        $lista = $controller->listar($inicio, $limite, $fechaInicioVistas);
 
         #
-        if (isset($_POST['accion']) && $_POST['accion']=='ver') {
+        if (isset($_POST['accion']) && $_POST['accion'] == 'ver') {
             $id = $_POST['id'];
             if ($impresion == 1) {
-            $controller->verDocImpresion($id);
-            }else{
+                $controller->verDocImpresion($id);
+            } else {
                 $controller->verDocCliente($id);
             }
-       
-       
         }
 
-     /*    if ($_POST) {
+        /*    if ($_POST) {
             $id = $_POST['id'];
             $accion = $_POST['accion'];
 

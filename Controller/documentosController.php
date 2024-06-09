@@ -21,7 +21,7 @@ class DocumentosController
   }
   public function contar($fechaRegistro)
   {
-    return $cantidadDocumentos = $this->objDocumento->contarDocumentos($fechaRegistro);
+    return $this->objDocumento->contarDocumentos($fechaRegistro);
   }
   public function listar($inicio, $limite, $fechaRegistro)
   {

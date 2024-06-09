@@ -73,14 +73,18 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
                                     <input type="number" class="form-control" name="telefonoSec">
                                 </div>
 
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <label for="input" class="form-label">Dirección</label>
                                     <input type="text" class="form-control" name="direccion" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="input" class="form-label">Inicio de visualizaciones</label>
+                                    <input type="date" class="form-control" name="desde" required>
                                 </div>
                                 <div class="col-md-1">
                                     <label for="input" class="form-label">N° vistas</label>
                                     <input type="hidden" name="generales" value="<?php echo $vistas_generales['vistas_generales']; ?>">
-                                    <input type="text" class="form-control" name="vistas_asignadas" value="<?php echo $vistas_generales['vistas_generales']; ?>" required>
+                                    <input type="number" class="form-control" name="vistas_asignadas" value="<?php echo $vistas_generales['vistas_generales']; ?>" required>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="input" class="form-label">Estado de cuenta</label>
@@ -163,7 +167,8 @@ if (isset($_SESSION['user']) && $_SESSION['user']['rol'] = 1) {
         </script>
     <?php
     if (isset($_POST['accion']) && $_POST['accion'] == "registrarCliente") {
-       $controller->registrar($_POST);      
+      $controller->registrar($_POST);      
+     # print_r($_POST);
     };
     require_once(dirname(__DIR__).'/admin/layout/footer.php');
 } else {

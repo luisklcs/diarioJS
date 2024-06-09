@@ -68,6 +68,11 @@ $data = $controller->cargarVistas();
                                         <th class="text-uppercase text-center text-secondary text-xs font-weight-bold ps-2">Usadas hoy</th>
                                         <th class="text-uppercase text-center text-secondary text-xs font-weight-bold ps-2">fecha primera vista</th>
                                         <th class="text-uppercase text-center text-secondary text-xs font-weight-bold ps-2">fecha ultima vista</th>
+                                        <th class="text-uppercase text-center text-secondary text-xs font-weight-bold ps-2">Dispositivo</th>
+                                        <th class="text-uppercase text-center text-secondary text-xs font-weight-bold ps-2">Sistema operativo</th>
+                                        <th class="text-uppercase text-center text-secondary text-xs font-weight-bold ps-2">Navegador</th>
+                                        <th class="text-uppercase text-center text-secondary text-xs font-weight-bold ps-2">Ip</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -113,6 +118,26 @@ $data = $controller->cargarVistas();
                                             <td>
                                                 <div class="align-middle text-center text-sm  py-1">
                                                     <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['fecha_ultima_vista']) ?></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="align-middle text-center text-sm  py-1">
+                                                    <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['dispositivo']) ?></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="align-middle text-center text-sm  py-1">
+                                                    <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['os']) ?></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="align-middle text-center text-sm  py-1">
+                                                    <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['navegador']) ?></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="align-middle text-center text-sm  py-1">
+                                                    <span class="text-uppercase text-xs font-weight-bold"><?php echo ($cliente['ip']) ?></span>
                                                 </div>
                                             </td>
 

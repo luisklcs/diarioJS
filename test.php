@@ -73,8 +73,120 @@
 
 </html>
 
+
 <?php
 
+require 'vendor/autoload.php';
+
+use WhichBrowser\Parser;
+
+
+
+
+
+echo "<br>";
+echo "SERVER";
+echo "<br>";
+
+$data = dispositivo();
+
+echo $data[0];
+echo "<br>";
+echo "Sistema operativo: " . $data[1];
+echo "<br>";
+echo "Dirección IP: " . $data[2];
+echo "<br>";
+echo "Dispositivo: " . $data[3];
+echo "<br>";
+
+function dispositivo()
+{
+
+    $dispositivo = detectDevice();
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $navegador = navegador();
+    $os = getOSDetails($_SERVER['HTTP_USER_AGENT']);
+
+    return array($navegador, $os, $ip, $dispositivo);
+}
+
+function detectDevice()
+{
+    $userAgent = $_SERVER['HTTP_USER_AGENT'];
+    $devices = array(
+        'Celular' => '/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i',
+        'Tablet' => '/(tablet|ipad|playbook)|(android(?!.*mobile))/i',
+        'Computador' => '/(windows|macintosh|linux|unix)/i'
+    );
+
+    foreach ($devices as $device => $regex) {
+        if (preg_match($regex, $userAgent)) {
+            return $device;
+        }
+    }
+    return 'Desconocido';
+}
+
+function getOSDetails($user_agent)
+{
+    $os_platform = "Unknown";
+    $os_array = array(
+        '/windows nt 10/i'      =>  'Windows 10',
+        '/windows nt 6.3/i'     =>  'Windows 8.1',
+        '/windows nt 6.2/i'     =>  'Windows 8',
+        '/windows nt 6.1/i'     =>  'Windows 7',
+        '/windows nt 6.0/i'     =>  'Windows Vista',
+        '/windows nt 5.2/i'     =>  'Windows Server 2003/XP x64',
+        '/windows nt 5.1/i'     =>  'Windows XP',
+        '/windows xp/i'         =>  'Windows XP',
+        '/windows nt 5.0/i'     =>  'Windows 2000',
+        '/windows me/i'         =>  'Windows ME',
+        '/win98/i'              =>  'Windows 98',
+        '/win95/i'              =>  'Windows 95',
+        '/win16/i'              =>  'Windows 3.11',
+        '/macintosh|mac os x/i' =>  'Mac OS X',
+        '/mac_powerpc/i'        =>  'Mac OS 9',
+        '/linux/i'              =>  'Linux',
+        '/ubuntu/i'             =>  'Ubuntu',
+        '/iphone/i'             =>  'iOS',
+        '/ipod/i'               =>  'iOS',
+        '/ipad/i'               =>  'iOS',
+        '/android/i'            =>  'Android',
+        '/blackberry/i'         =>  'BlackBerry',
+        '/webos/i'              =>  'Mobile'
+    );
+
+    foreach ($os_array as $regex => $value) {
+        if (preg_match($regex, $user_agent)) {
+            $os_platform = $value;
+        }
+    }
+
+    return $os_platform;
+}
+
+function navegador()
+{
+    $headers = getallheaders();
+    $user_agent = $_SERVER['HTTP_USER_AGENT'];
+    // Crear una nueva instancia del parser con el user agent
+    $parser = new Parser($headers);
+    // Obtener el resultado del análisis
+    $result = new Parser($user_agent);
+    echo "Navegador: " . $result->browser->name . "\n";
+    echo "Versión: " . $result->browser->version->value . "\n";
+}
+
+
+
+
+// Recorrer el array $_SERVER utilizando foreach
+/* foreach ($_SERVER as $clave => $valor) {
+    echo "$clave => $valor <br>";
+} */
+
+
+/* 
 include_once(dirname(__DIR__) . '/NotificacionesJudicialesSincelejo/mail/enviar.php');
 
 if (isset($_POST['notificar'])) {
@@ -112,4 +224,42 @@ if (isset($_POST['notificar'])) {
         }
     }
 }
-?>
+?> */
+
+
+/* 
+
+ <script>
+    window.addEventListener('modalcreate', function() {
+
+        setTimeout(() => {
+            tinymce.init({
+                selector: '#myTextarea',
+                width: 1000,
+                height: 590,
+                plugins: [
+                    'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview',
+                    'anchor',
+                    'pagebreak',
+                    'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code',
+                    'fullscreen',
+                    'insertdatetime',
+                    'media', 'table', 'emoticons', 'help'
+                ],
+                toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
+                    'bullist numlist outdent indent   ',
+                menu: {
+                    favs: {
+                        title: 'My Favorites',
+                        items: ' searchreplace '
+                    }
+                },
+                menubar: 'favs file edit view insert format tools ',
+                content_css: 'css/content.css',
+                noneditable_class: 'mceNonEditable',
+
+            });
+
+        });
+    }, 1000);
+</script>  */
